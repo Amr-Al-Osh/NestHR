@@ -1,0 +1,36 @@
+﻿<table id="dataTable" class="display" style="width:100%">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Value</th>
+            <!-- Add more columns as needed -->
+        </tr>
+    </thead>
+    <tbody>
+  
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <!-- Add more columns as needed -->
+            </tr>
+        
+    </tbody>
+</table>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+
+        $.ajax({
+            type: "GET",
+            url: "/GetAllArea",
+            success: function (data) {
+                console.log(data);
+            }
+        });
+
+    });
+
+</script>
