@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace NestHR.Models;
+namespace NestHR.Models.GeneralDefinition;
 
-public partial class Area
+public partial class AreaModel
 {
     public int Id { get; set; }
 

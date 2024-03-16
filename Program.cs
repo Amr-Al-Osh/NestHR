@@ -1,5 +1,8 @@
 using Domin.Models;
+using HRService;
 using HRService.GeneralDefinition.Interfaces;
+using HRService.GeneralDefinitionService;
+using HRService.GeneralDefinitionService.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using NestHR.BusinessHR.GeneralDefinition;
@@ -18,7 +21,13 @@ namespace NestHR
 
 
             builder.Services.AddControllersWithViews();
-            builder.Services.AddScoped<IAreaService, AreaService>();
+
+            #region ============> [Scoped Genral]
+
+            builder.Services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+
+
+            #endregion [Scoped Genral] 
 
             builder.Services.AddAuthentication().AddJwtBearer();
 

@@ -1,38 +1,33 @@
 ﻿using Domin.Models;
 using HRService;
-using HRService.GeneralDefinition.Interfaces;
 using HRService.GeneralDefinitionService.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using NestHR.BusinessHR.GeneralDefinition;
+using NestHR.Models.GeneralDefinition;
 using System.Linq.Expressions;
 
 namespace NestHR.Controllers.GeneralDefinition
 {
-    public class AreaController : Controller
+    public class BanksController : Controller
     {
-        private IRepositoryWrapper _db;
+        private readonly IBaseService<Bank> _bankService;
 
-        public AreaController(IRepositoryWrapper db)
+        public BanksController(IBaseService<Bank> bankService)
         {
-            _db = db;
+            _bankService = bankService;
         }
 
-        [Route("Area")]
-        public async Task<IActionResult> Area()
+        [Route("Banks")]
+        public IActionResult BanksPage()
         {
-          
-            var data = await _db.Areas.ReadAllAsync();
-            return View(data);
+            return View();
         }
 
-        [HttpGet("GetAllArea")]
-        public async Task<IActionResult> GetAllArea()
-        {
-            return Ok(await _db.Areas.ReadAllAsync());
-        }
-
-        [HttpPost("GetDataTableArea")]
-        public async Task<IActionResult> GetDataTableArea()
+        [HttpGet("GetAllBanks")]
+        public async Task<IActionResult> GetAllBanks()=>        
+             Ok(await _bankService.ReadAllAsync());
+        
+        [HttpPost("GetDataTableBanks")]
+        public async Task<IActionResult> GetDataTableBanks()
         {
             int totalRecord = 0;
             int filterRecord = 0;
@@ -44,7 +39,7 @@ namespace NestHR.Controllers.GeneralDefinition
             int pageSize = Convert.ToInt32(Request.Form["length"].FirstOrDefault() ?? "0");
             int skip = Convert.ToInt32(Request.Form["start"].FirstOrDefault() ?? "0");
 
-            var data = await _db.Areas.ReadAllAsync();
+            var data = await _bankService.ReadAllAsync();
 
             totalRecord = data.Count();
 
@@ -61,16 +56,16 @@ namespace NestHR.Controllers.GeneralDefinition
             //sort data
             if (!string.IsNullOrEmpty(sortColumnName) && !string.IsNullOrEmpty(sortDirection))
             {
-                var property = typeof(Area).GetProperty(sortColumnName);
+                var property = typeof(Bank).GetProperty(sortColumnName);
                 if (property != null)
                 {
-                    var orderByExpression = Expression.Lambda<Func<Area, object>>(
+                    var orderByExpression = Expression.Lambda<Func<Bank, object>>(
                         Expression.Convert(
                             Expression.Property(
-                                Expression.Parameter(typeof(Area), "x"),
+                                Expression.Parameter(typeof(Bank), "x"),
                                 property),
                             typeof(object)),
-                        Expression.Parameter(typeof(Area), "x"));
+                        Expression.Parameter(typeof(Bank), "x"));
 
                     if (sortDirection.Equals("desc", StringComparison.CurrentCultureIgnoreCase))
                     {
@@ -80,7 +75,7 @@ namespace NestHR.Controllers.GeneralDefinition
                     {
                         data = data.OrderBy(orderByExpression);
                     }
-                }               
+                }
             }
 
             var result = data.Skip(skip).Take(pageSize).ToList();
@@ -94,25 +89,24 @@ namespace NestHR.Controllers.GeneralDefinition
             });
         }
 
-        [HttpPost("NewArea")]
-        public async Task<IActionResult> NewArea([FromBody] Area model)
+        [HttpPost("AddNewBanks")]
+        public async Task<IActionResult> AddNewBanks([FromBody] Bank model)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var existingArea = await _db.Areas.GetByAsync(x => x.Value == model.Value);
+                    var existingBank = await _bankService.GetByAsync(x=>x.Value == model.Value);
 
-                    if (existingArea != null)
+                    if (existingBank != null)
                     {
-                        return BadRequest("Area already exists.");
+                        return BadRequest("Banks already exists.");
                     }
 
-                    model.Value = await _db.Areas.GetMaxAsync(x => x.Value);
+                    model.Value = await _bankService.GetMaxAsync(x=>x.Value);
+                    _bankService.Add(model);
 
-                    _db.Areas.Add(model);
-
-                    await _db.Areas.SaveChangesAsync();
+                    await _bankService.SaveChangesAsync();
 
                     return Ok(true);
                 }
@@ -127,30 +121,28 @@ namespace NestHR.Controllers.GeneralDefinition
             }
         }
 
-        [HttpPost("EditeArea")]
-        public async Task<IActionResult> EditeArea([FromBody] Area model)
+        [HttpPost("EditeBanks")]
+        public async Task<IActionResult> EditeBanks([FromBody] BanksModel model)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var existingArea = await _db.Areas.GetByAsync(x => x.Value == model.Value);
+                    var existingBank = await _bankService.GetByAsync(x => x.Value == model.Value);
 
-                    if (existingArea is null)
+                    if (existingBank != null)
                     {
-                        return NotFound("Area not found.");
+                        existingBank.NameEng = model.NameEng ?? "";
+                        existingBank.NameAr = model.NameAr ?? "";
+                        _bankService.Update(existingBank);
+
+                        await _bankService.SaveChangesAsync();
+
+                        return Ok(true);
                     }
                     else
                     {
-                        existingArea.NameEng = model.NameEng ?? "";
-                        existingArea.NameAr = model.NameAr ?? "";
-
-                        _db.Areas.Update(existingArea);
-
-                        await _db.Areas.SaveChangesAsync();
-
-                        return Ok(true);
-                       
+                        return NotFound("Area not found.");
                     }
                 }
                 else
@@ -164,17 +156,17 @@ namespace NestHR.Controllers.GeneralDefinition
             }
         }
 
-        [HttpPost("DealetArea")]
-        public async Task<IActionResult> DealetArea(int value)
+        [HttpPost("DealetBanks")]
+        public async Task<IActionResult> DealetBanks(int value)
         {
             try
             {
-                var existingArea = await _db.Areas.GetByAsync(x => x.Value == value);
+                var existingBank = await _bankService.GetByAsync(x => x.Value == value);
 
-                if (existingArea != null)
+                if (existingBank != null)
                 {
-                    _db.Areas.Remove(existingArea);
-                    await _db.Areas.SaveChangesAsync();
+                    _bankService.Remove(existingBank);
+                    await _bankService.SaveChangesAsync();
                 }
 
                 return NotFound("Area not found.");
@@ -184,6 +176,8 @@ namespace NestHR.Controllers.GeneralDefinition
                 return StatusCode(500, ex.Message);
             }
         }
+
+
 
 
     }
