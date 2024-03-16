@@ -9,11 +9,11 @@ namespace NestHR.Controllers.GeneralDefinition
 {
     public class BanksController : Controller
     {
-        private readonly IBaseService<Bank> _bankService;
+        private IRepositoryWrapper _db;
 
-        public BanksController(IBaseService<Bank> bankService)
+        public BanksController(IRepositoryWrapper db)
         {
-            _bankService = bankService;
+            _db = db;
         }
 
         [Route("Banks")]
@@ -24,7 +24,7 @@ namespace NestHR.Controllers.GeneralDefinition
 
         [HttpGet("GetAllBanks")]
         public async Task<IActionResult> GetAllBanks()=>        
-             Ok(await _bankService.ReadAllAsync());
+             Ok(await _db.Banks.ReadAllAsync());
         
         [HttpPost("GetDataTableBanks")]
         public async Task<IActionResult> GetDataTableBanks()
@@ -39,7 +39,7 @@ namespace NestHR.Controllers.GeneralDefinition
             int pageSize = Convert.ToInt32(Request.Form["length"].FirstOrDefault() ?? "0");
             int skip = Convert.ToInt32(Request.Form["start"].FirstOrDefault() ?? "0");
 
-            var data = await _bankService.ReadAllAsync();
+            var data = await _db.Banks.ReadAllAsync();
 
             totalRecord = data.Count();
 
@@ -96,17 +96,17 @@ namespace NestHR.Controllers.GeneralDefinition
             {
                 if (ModelState.IsValid)
                 {
-                    var existingBank = await _bankService.GetByAsync(x=>x.Value == model.Value);
+                    var existingBank = await _db.Banks.GetByAsync(x=>x.Value == model.Value);
 
                     if (existingBank != null)
                     {
                         return BadRequest("Banks already exists.");
                     }
 
-                    model.Value = await _bankService.GetMaxAsync(x=>x.Value);
-                    _bankService.Add(model);
+                    model.Value = await _db.Banks.GetMaxAsync(x=>x.Value);
+                    _db.Banks.Add(model);
 
-                    await _bankService.SaveChangesAsync();
+                    await _db.Banks.SaveChangesAsync();
 
                     return Ok(true);
                 }
@@ -128,15 +128,15 @@ namespace NestHR.Controllers.GeneralDefinition
             {
                 if (ModelState.IsValid)
                 {
-                    var existingBank = await _bankService.GetByAsync(x => x.Value == model.Value);
+                    var existingBank = await _db.Banks.GetByAsync(x => x.Value == model.Value);
 
                     if (existingBank != null)
                     {
                         existingBank.NameEng = model.NameEng ?? "";
                         existingBank.NameAr = model.NameAr ?? "";
-                        _bankService.Update(existingBank);
+                        _db.Banks.Update(existingBank);
 
-                        await _bankService.SaveChangesAsync();
+                        await _db.Banks.SaveChangesAsync();
 
                         return Ok(true);
                     }
@@ -161,12 +161,12 @@ namespace NestHR.Controllers.GeneralDefinition
         {
             try
             {
-                var existingBank = await _bankService.GetByAsync(x => x.Value == value);
+                var existingBank = await _db.Banks.GetByAsync(x => x.Value == value);
 
                 if (existingBank != null)
                 {
-                    _bankService.Remove(existingBank);
-                    await _bankService.SaveChangesAsync();
+                    _db.Banks.Remove(existingBank);
+                    await _db.Banks.SaveChangesAsync();
                 }
 
                 return NotFound("Area not found.");
