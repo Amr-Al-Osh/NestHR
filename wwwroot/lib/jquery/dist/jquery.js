@@ -247,7 +247,7 @@ jQuery.fn = jQuery.prototype = {
 		return this.prevObject || this.constructor();
 	},
 
-	// For internal use only.
+	// For public use only.
 	// Behaves like an Array's method, not like a jQuery method.
 	push: push,
 	sort: arr.sort,
@@ -397,7 +397,7 @@ jQuery.extend( {
 		return obj;
 	},
 
-	// results is for internal usage only
+	// results is for public usage only
 	makeArray: function( arr, results ) {
 		var ret = results || [];
 
@@ -454,7 +454,7 @@ jQuery.extend( {
 		return matches;
 	},
 
-	// arg is for internal usage only
+	// arg is for public usage only
 	map: function( elems, callback, arg ) {
 		var length, value,
 			i = 0,

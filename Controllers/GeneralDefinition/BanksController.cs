@@ -9,9 +9,9 @@ namespace NestHR.Controllers.GeneralDefinition
 {
     public class BanksController : Controller
     {
-        private IRepositoryWrapper _db;
+        private IHRDefinitionWrapper _db;
 
-        public BanksController(IRepositoryWrapper db)
+        public BanksController(IHRDefinitionWrapper db)
         {
             _db = db;
         }

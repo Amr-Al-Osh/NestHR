@@ -1,34 +1,34 @@
 ﻿using Domin.Models;
-using HRService;
-using HRService.GeneralDefinition.Interfaces;
 using HRService.GeneralDefinitionService.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using NestHR.BusinessHR.GeneralDefinition;
+
 using System.Linq.Expressions;
 
 namespace NestHR.Controllers.GeneralDefinition
 {
     public class AreaController : Controller
     {
-        private IRepositoryWrapper _db;
-
-        public AreaController(IRepositoryWrapper db)
+        private IHRDefinitionWrapper _db;
+        private ILogger _logger;
+        public AreaController(IHRDefinitionWrapper db, ILogger logger)
         {
             _db = db;
+            _logger = logger;
         }
 
         [Route("Area")]
         public async Task<IActionResult> Area()
         {
-          
-            var data = await _db.Areas.ReadAllAsync();
+
+            var data = await _db.Area.ReadAllAsync();
+
             return View(data);
         }
 
         [HttpGet("GetAllArea")]
         public async Task<IActionResult> GetAllArea()
         {
-            return Ok(await _db.Areas.ReadAllAsync());
+            return Ok(await _db.Area.ReadAllAsync());
         }
 
         [HttpPost("GetDataTableArea")]
@@ -44,7 +44,7 @@ namespace NestHR.Controllers.GeneralDefinition
             int pageSize = Convert.ToInt32(Request.Form["length"].FirstOrDefault() ?? "0");
             int skip = Convert.ToInt32(Request.Form["start"].FirstOrDefault() ?? "0");
 
-            var data = await _db.Areas.ReadAllAsync();
+            var data = await _db.Area.ReadAllAsync();
 
             totalRecord = data.Count();
 
@@ -52,7 +52,7 @@ namespace NestHR.Controllers.GeneralDefinition
             {
                 data = data.Where(x =>
                     x.Id.ToString().Contains(searchValue) ||
-                    x.Value.ToString().Contains(searchValue) ||
+                    x.AreaNum.ToString().Contains(searchValue) ||
                     (x.NameAr ?? "").Contains(searchValue, StringComparison.OrdinalIgnoreCase) ||
                     (x.NameEng ?? "").Contains(searchValue, StringComparison.OrdinalIgnoreCase));
             }
@@ -80,7 +80,7 @@ namespace NestHR.Controllers.GeneralDefinition
                     {
                         data = data.OrderBy(orderByExpression);
                     }
-                }               
+                }
             }
 
             var result = data.Skip(skip).Take(pageSize).ToList();
@@ -97,32 +97,40 @@ namespace NestHR.Controllers.GeneralDefinition
         [HttpPost("NewArea")]
         public async Task<IActionResult> NewArea([FromBody] Area model)
         {
+            var users = await _db.Users.GetAllAsync();
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var existingArea = await _db.Areas.GetByAsync(x => x.Value == model.Value);
+                    var existingArea = await _db.Area.GetByAsync(x => x.AreaNum == model.AreaNum);
 
                     if (existingArea != null)
                     {
                         return BadRequest("Area already exists.");
                     }
 
-                    model.Value = await _db.Areas.GetMaxAsync(x => x.Value);
+                    model.AreaNum = await _db.Area.GetMaxAsync(x => x.AreaNum);
 
-                    _db.Areas.Add(model);
+                    _db.Area.Add(model);
 
-                    await _db.Areas.SaveChangesAsync();
+                    await _db.Area.SaveChangesAsync();
+
+                    var userNames = string.Join(", ", (await _db.Users.GetAllAsync()).Select(u => u.UserName));
+                    _logger.LogInformation($"User(s) {userNames} added new area: {model}");
+
 
                     return Ok(true);
                 }
                 else
                 {
+                    _logger.LogError("Invalid model state while adding new area: {@Model}", model);
                     return BadRequest(ModelState);
                 }
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, ex.Message);
+
                 return StatusCode(500, ex.Message);
             }
         }
@@ -134,7 +142,7 @@ namespace NestHR.Controllers.GeneralDefinition
             {
                 if (ModelState.IsValid)
                 {
-                    var existingArea = await _db.Areas.GetByAsync(x => x.Value == model.Value);
+                    var existingArea = await _db.Area.GetByAsync(x => x.AreaNum == model.AreaNum);
 
                     if (existingArea is null)
                     {
@@ -145,12 +153,12 @@ namespace NestHR.Controllers.GeneralDefinition
                         existingArea.NameEng = model.NameEng ?? "";
                         existingArea.NameAr = model.NameAr ?? "";
 
-                        _db.Areas.Update(existingArea);
+                        _db.Area.Update(existingArea);
 
-                        await _db.Areas.SaveChangesAsync();
+                        await _db.Area.SaveChangesAsync();
 
                         return Ok(true);
-                       
+
                     }
                 }
                 else
@@ -165,16 +173,16 @@ namespace NestHR.Controllers.GeneralDefinition
         }
 
         [HttpPost("DealetArea")]
-        public async Task<IActionResult> DealetArea(int value)
+        public async Task<IActionResult> DealetArea(int areaNum)
         {
             try
             {
-                var existingArea = await _db.Areas.GetByAsync(x => x.Value == value);
+                var existingArea = await _db.Area.GetByAsync(x => x.AreaNum == areaNum);
 
                 if (existingArea != null)
                 {
-                    _db.Areas.Remove(existingArea);
-                    await _db.Areas.SaveChangesAsync();
+                    _db.Area.Remove(existingArea);
+                    await _db.Area.SaveChangesAsync();
                 }
 
                 return NotFound("Area not found.");

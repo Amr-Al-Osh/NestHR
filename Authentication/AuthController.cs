@@ -8,8 +8,8 @@ using System.Text;
 namespace NestHR.Authentication
 {
     [Route("Auths")]
-    [ApiController]
-    public class AuthController : ControllerBase
+   
+    public class AuthController : Controller
     {
         public static Users user = new Users();
         private readonly IConfiguration _configuration;
@@ -50,8 +50,6 @@ namespace NestHR.Authentication
             return Ok(token);
 
         }
-
-
 
         private string CreatToken(Users user)
         {

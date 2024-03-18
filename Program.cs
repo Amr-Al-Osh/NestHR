@@ -1,11 +1,8 @@
 using Domin.Models;
-using HRService;
-using HRService.GeneralDefinition.Interfaces;
 using HRService.GeneralDefinitionService;
 using HRService.GeneralDefinitionService.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using NestHR.BusinessHR.GeneralDefinition;
+
 
 namespace NestHR
 {
@@ -24,7 +21,7 @@ namespace NestHR
 
             #region ============> [Scoped Genral]
 
-            builder.Services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+            builder.Services.AddScoped<IHRDefinitionWrapper, HRDefinitionWrapper>();
 
 
             #endregion [Scoped Genral] 
