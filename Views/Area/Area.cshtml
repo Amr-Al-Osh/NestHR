@@ -1,36 +1,174 @@
-﻿<table id="dataTable" class="display" style="width:100%">
+﻿
+
+<button class="btn btn-info" id="add">Max</button>
+<button class="btn btn-success" id="New">New</button>
+<button class="btn btn-primary" id="edit">edite</button>
+
+<div class="row">
+    <div class="col-4 my-3">
+        <input type="text" class="form-control" id="maxid" />
+    </div>
+
+    <div class="col-4 my-3">
+        <input type="text" class="form-control" placeholder="nameAr" id="nameAr" dir="rtl" />
+    </div>
+
+    <div class="col-4 my-3">
+        <input type="text" class="form-control" placeholder="nameEng" id="nameEng" dir="ltr" />
+    </div>
+</div>
+
+<table id="dataTable" class="display table table-striped" style="width:100%">
     <thead>
         <tr>
-            <th>Id</th>
-            <th>Name</th>
             <th>Value</th>
-            <!-- Add more columns as needed -->
+            <th>NameAr</th>
+            <th>NameEng</th>
+            <th>Edit</th>
+            <th>delete</th>
         </tr>
     </thead>
-    <tbody>
-  
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <!-- Add more columns as needed -->
-            </tr>
-        
+    <tbody id="bodys">
     </tbody>
 </table>
+
+
+
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
 
-    $(document).ready(function () {
-
+    GetData();
+    function GetData() {
         $.ajax({
             type: "GET",
             url: "/GetAllArea",
             success: function (data) {
                 console.log(data);
+                var newRow = "";
+                $("tbody").empty(); // Clear existing table rows
+                for (var i = 0; i < data.length; i++) { // Fix spelling of 'length'
+                    newRow += `<tr>
+                                        <td>${data[i].areaNum}</td>
+                                        <td>${data[i].nameAr}</td>
+                                        <td>${data[i].nameEng}</td>
+                                        <td><button class="btn btn-warning" onclick="EditTable(${data[i].areaNum})">edit</button></td>
+                                        <td><button class="btn btn-danger" onclick="DeleteTable(${data[i].areaNum})">delete</button></td>
+                                    </tr>`;
+                }
+                $("tbody").append(newRow); // Append new rows to tbody
+            },
+            error: function (xhr, status, error) {
+                console.error("Error occurred while fetching data:", error);
+                // Handle error condition appropriately
+                // For example, display an error message to the user
+                alert("Error occurred while fetching data. Please try again later.");
+            }
+        });
+    }
+
+
+    $("#add").on("click", function () {
+        $.ajax({
+            type: "GET",
+            url: "/GetMaxAreaNum",
+            async: true,
+            success: function (max) {
+                $("#maxid").val(max);
+            },
+            error: function (xhr, status, error) {
+                console.log(error);
+                console.log(xhr);
+            }
+        });
+    });
+
+    $("#New").on("click", function () {
+
+        var AreaNum = $("#maxid").val();
+        var NameAr = $("#nameAr").val();
+        var NameEng = $("#nameEng").val();
+
+        var data = {
+            AreaNum: $("#maxid").val(),
+            NameAr: $("#nameAr").val().trim(),
+            NameEng: $("#nameEng").val().trim(),
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/NewArea",
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            success: function (data) {
+                console.log("NewArea " + data);
+                GetData();
+            },
+            error: function (xhr, status, error) {
+                console.log(error);
+                console.log(xhr);
             }
         });
 
     });
+
+    $("#edit").on("click", function () {
+
+        var AreaNum = $("#maxid").val();
+        var NameAr = $("#nameAr").val();
+        var NameEng = $("#nameEng").val();
+
+        var data = {
+            AreaNum: $("#maxid").val(),
+            NameAr: $("#nameAr").val().trim(),
+            NameEng: $("#nameEng").val().trim(),
+        }
+
+        $.ajax({
+            type: "Put",
+            url: "/EditeArea",
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            success: function (data) {
+                console.log("EditeArea " + data);
+                GetData();
+            },
+            error: function (xhr, status, error) {
+                console.log(xhr);
+            }
+        });
+
+    });
+
+    function EditTable(areaNum) {
+        $.ajax({
+            type: "GET",
+            url: "/GetAreaBy/" + areaNum,
+            success: function (data) {
+                $("#maxid").val(data.areaNum);
+                $("#nameAr").val(data.nameAr);
+                $("#nameEng").val(data.nameEng);
+            },
+            error: function (xhr, status, error) {
+                console.log(xhr.responseText);
+            }
+        });
+    }
+
+    function DeleteTable(areaNum) {
+        $.ajax({
+            type: "DELETE",
+            url: "/DealetArea/" + areaNum,
+            success: function (data) {
+                console.log("DealetArea " + data);
+                GetData();
+            },
+            error: function (xhr, status, error) {
+                console.log(error.responseText);
+                console.log(xhr.responseText);
+            }
+        });
+    }
+
 
 </script>

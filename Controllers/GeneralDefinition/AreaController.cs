@@ -1,6 +1,5 @@
 ﻿using Domin.Models;
 using HRService.GeneralDefinitionService.Interfaces;
-using HRService.LogHR.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 using System.Linq.Expressions;
@@ -11,28 +10,35 @@ namespace NestHR.Controllers.GeneralDefinition
     public class AreaController : Controller
     {
         private IHRDefinitionWrapper _db;
-        private IHrLogWarpper _HrLog;
-        public AreaController(IHRDefinitionWrapper db, IHrLogWarpper HrLog)
+
+        public AreaController(IHRDefinitionWrapper db)
         {
             _db = db;
-            _HrLog = HrLog;
         }
+
 
         [Route("Area")]
-        public async Task<IActionResult> Area()
-        {
-            var data = await _db.Area.ReadAllAsync();
-
-            return View(data);
-        }
+        public IActionResult Area() => View();
 
         #region =================> [Get Data]
 
-        [HttpGet("GetAllArea")]
-        public async Task<IActionResult> GetAllArea()
-        {
+        [HttpGet("GetMaxAreaNum")]
+        public async Task<IActionResult> GetMaxAreaNum() => Ok(await _db.Area.GetMaxAsync(x => x.AreaNum));
 
-            return Ok(await _db.Area.ReadAllAsync());
+        [HttpGet("GetAllArea")]
+        public async Task<IActionResult> GetAllArea() => Ok(await _db.Area.ReadAllAsync());
+
+        [HttpGet("GetAreaBy/{areaNum}")]
+        public IActionResult GetAreaBy(int areaNum)
+        {
+            var existArea = _db.Area.GetBy(x => x.AreaNum == areaNum);
+
+            if (existArea.Count() == 0)
+            {
+                return NotFound("Area not found.");
+            }
+
+            return Ok(existArea.FirstOrDefault());
         }
 
         [HttpPost("GetDataTableArea")]
@@ -55,7 +61,6 @@ namespace NestHR.Controllers.GeneralDefinition
             if (!string.IsNullOrEmpty(searchValue))
             {
                 data = data.Where(x =>
-                    x.Id.ToString().Contains(searchValue) ||
                     x.AreaNum.ToString().Contains(searchValue) ||
                     (x.NameAr ?? "").Contains(searchValue, StringComparison.OrdinalIgnoreCase) ||
                     (x.NameEng ?? "").Contains(searchValue, StringComparison.OrdinalIgnoreCase));
@@ -100,46 +105,34 @@ namespace NestHR.Controllers.GeneralDefinition
 
         #endregion
 
-
         #region =================> [Operation On Data]
 
         [HttpPost("NewArea")]
         public async Task<IActionResult> NewArea([FromBody] Area model)
         {
-            var users = await _db.Users.GetAllAsync();
             try
             {
-                if (ModelState.IsValid)
+                var existingArea = _db.Area.GetBy(x => (x.NameAr == model.NameAr && x.NameAr != "") || (x.NameEng == model.NameEng && x.NameEng != ""));
+
+                if (existingArea.Any())
                 {
-                    var existingArea = await _db.Area.GetByAsync(x => x.AreaNum == model.AreaNum);
-
-                    if (existingArea != null)
-                    {
-                        return BadRequest("Area already exists.");
-                    }
-
-                    model.AreaNum = await _db.Area.GetMaxAsync(x => x.AreaNum);
-
-                    _db.Area.Add(model);
-
-                    await _db.Area.SaveChangesAsync();
-
-                    var userNames = string.Join(", ", (await _db.Users.GetAllAsync()).Select(u => u.UserName));
-
-                    await _HrLog.UserLog.AddUserLogAsync(1, "userName", 1, $"Add New Area Name = {model.NameAr??model.NameEng} have Number = {model.AreaNum}");
-
-                    return Ok(true);
+                    return BadRequest($"Area with the same name = {model.NameAr ?? model.NameEng} already exists.");
                 }
-                else
-                {
-                    //_logger.LogError("Invalid model state while adding new area: {@Model}", model);
-                    return BadRequest(ModelState);
-                }
+
+                model.AreaNum = await _db.Area.GetMaxAsync(x => x.AreaNum);
+
+                await _db.Area.AddAsync(model);
+
+                await _db.Area.SaveChangesAsync();
+
+                await _db.UserLog.AddUserLogAsync(1, "userName", 1, $"Add New Area Name = {model.NameAr ?? model.NameEng} have Number = {model.AreaNum}");
+
+                return Ok(true);
 
             }
             catch (Exception ex)
             {
-                ErrorLog error = await _HrLog.ErrorLog.AddErrorLogAsync(
+                ErrorLog error = await _db.ErrorLog.AddErrorLogAsync(
                     new ErrorLog
                     {
                         UserNumRef = 1,
@@ -153,42 +146,50 @@ namespace NestHR.Controllers.GeneralDefinition
             }
         }
 
-
-        [HttpPost("EditeArea")]
+        [HttpPut("EditeArea")]
         public async Task<IActionResult> EditeArea([FromBody] Area model)
         {
             try
             {
-                if (ModelState.IsValid)
+                int lang = 1;
+
+                var area = _db.Area.GetAll().ToList();
+
+                var existingArea = area.FirstOrDefault(x => x.AreaNum == model.AreaNum);
+
+                if (existingArea is null)
                 {
-                    var existingArea = await _db.Area.GetByAsync(x => x.AreaNum == model.AreaNum);
-
-                    if (existingArea is null)
-                    {
-                        return NotFound("Area not found.");
-                    }
-                    else
-                    {
-                        existingArea.NameEng = model.NameEng ?? "";
-                        existingArea.NameAr = model.NameAr ?? "";
-
-                        _db.Area.Update(existingArea);
-
-                        await _db.Area.SaveChangesAsync();
-
-                        await _HrLog.UserLog.AddUserLogAsync(1, "userName", 2, $"Edite Area Name = {model.NameAr ?? model.NameEng} have Number = {model.AreaNum}");
-
-                        return Ok(true);
-                    }
+                    return NotFound($"Area with this number = {model.AreaNum} Not found.");
                 }
-                else
+
+                var checkNameExist = area.Any(x => lang == 1 ?
+                    (x.NameAr ?? "").Equals(model.NameAr ?? "", StringComparison.CurrentCultureIgnoreCase) :
+                    (x.NameEng ?? "").Equals(model.NameEng ?? "", StringComparison.CurrentCultureIgnoreCase));
+
+                var isNameChangeConflict = checkNameExist ? (lang == 1 ?
+                    !(existingArea.NameAr ?? "").Equals(model.NameAr ?? "", StringComparison.CurrentCultureIgnoreCase) :
+                    !(existingArea.NameEng ?? "").Equals(model.NameEng ?? "", StringComparison.CurrentCultureIgnoreCase))
+                    : false;
+
+                if (isNameChangeConflict)
                 {
-                    return BadRequest(ModelState);
+                    return BadRequest($"An area with the same name '{model.NameAr ?? model.NameEng}' already exists.");
                 }
+
+                await _db.UserLog.AddUserLogAsync(1, "userName", 2, $"Edit Area with Number = {model.AreaNum} from Name = {(lang == 1 ? existingArea.NameAr : existingArea.NameEng)} to Name = {(lang == 1 ? model.NameAr : model.NameEng)}");
+
+                existingArea.NameEng = model.NameEng ?? "";
+                existingArea.NameAr = model.NameAr ?? "";
+
+                _db.Area.Update(existingArea);
+
+                await _db.Area.SaveChangesAsync();
+
+                return Ok(true);
             }
             catch (Exception ex)
             {
-                ErrorLog error = await _HrLog.ErrorLog.AddErrorLogAsync(
+                ErrorLog error = _db.ErrorLog.AddErrorLog(
                     new ErrorLog
                     {
                         UserNumRef = 1,
@@ -202,30 +203,29 @@ namespace NestHR.Controllers.GeneralDefinition
             }
         }
 
-
-        [HttpPost("DealetArea")]
+        [HttpDelete("DealetArea/{areaNum}")]
         public async Task<IActionResult> DealetArea(int areaNum)
         {
             try
             {
-                var existingArea = await _db.Area.GetByAsync(x => x.AreaNum == areaNum);
+                var existingArea = _db.Area.GetBy(x => x.AreaNum == areaNum).FirstOrDefault();
 
                 if (existingArea is null)
                 {
-                    return NotFound("Area not found.");
+                    return NotFound($"Area with this number = {areaNum} Not found.");
                 }
 
                 _db.Area.Remove(existingArea);
 
                 await _db.Area.SaveChangesAsync();
 
-                await _HrLog.UserLog.AddUserLogAsync(1, "userName", 2, $"Delete Area Name = {existingArea.NameAr ?? existingArea.NameEng} have Number = {existingArea.AreaNum}");
+                await _db.UserLog.AddUserLogAsync(1, "userName", 3, $"Delete Area Name = {existingArea.NameAr ?? existingArea.NameEng} have Number = {existingArea.AreaNum}");
 
                 return Ok(true);
             }
             catch (Exception ex)
             {
-                ErrorLog error = await _HrLog.ErrorLog.AddErrorLogAsync(
+                ErrorLog error = await _db.ErrorLog.AddErrorLogAsync(
                     new ErrorLog
                     {
                         UserNumRef = 1,

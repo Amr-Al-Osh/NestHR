@@ -1,5 +1,4 @@
 ﻿using Domin.Models;
-using HRService;
 using HRService.GeneralDefinitionService.Interfaces;
 using HRService.LogHR.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -25,9 +24,9 @@ namespace NestHR.Controllers.GeneralDefinition
         }
 
         [HttpGet("GetAllBanks")]
-        public async Task<IActionResult> GetAllBanks()=>        
+        public async Task<IActionResult> GetAllBanks() =>
              Ok(await _db.Banks.ReadAllAsync());
-        
+
         [HttpPost("GetDataTableBanks")]
         public async Task<IActionResult> GetDataTableBanks()
         {
@@ -98,14 +97,14 @@ namespace NestHR.Controllers.GeneralDefinition
             {
                 if (ModelState.IsValid)
                 {
-                    var existingBank = await _db.Banks.GetByAsync(x=>x.Value == model.Value);
+                    var existingBank = _db.Banks.GetBy(x => x.Value == model.Value).FirstOrDefault();
 
                     if (existingBank != null)
                     {
                         return BadRequest("Banks already exists.");
                     }
 
-                    model.Value = await _db.Banks.GetMaxAsync(x=>x.Value);
+                    model.Value = await _db.Banks.GetMaxAsync(x => x.Value);
                     _db.Banks.Add(model);
 
                     await _db.Banks.SaveChangesAsync();
@@ -130,7 +129,7 @@ namespace NestHR.Controllers.GeneralDefinition
             {
                 if (ModelState.IsValid)
                 {
-                    var existingBank = await _db.Banks.GetByAsync(x => x.Value == model.Value);
+                    var existingBank = _db.Banks.GetBy(x => x.Value == model.Value).FirstOrDefault();
 
                     if (existingBank != null)
                     {
@@ -163,7 +162,7 @@ namespace NestHR.Controllers.GeneralDefinition
         {
             try
             {
-                var existingBank = await _db.Banks.GetByAsync(x => x.Value == value);
+                var existingBank = _db.Banks.GetBy(x => x.Value == value).FirstOrDefault();
 
                 if (existingBank != null)
                 {
@@ -178,8 +177,6 @@ namespace NestHR.Controllers.GeneralDefinition
                 return StatusCode(500, ex.Message);
             }
         }
-
-
 
 
     }
