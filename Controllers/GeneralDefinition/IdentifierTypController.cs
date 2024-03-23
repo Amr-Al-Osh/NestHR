@@ -1,4 +1,5 @@
 ﻿using HRService.GeneralDefinitionService.Interfaces;
+using HRService.LogHR.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +10,14 @@ namespace NestHR.Controllers.GeneralDefinition
     public class IdentifierTypController : Controller
     {
         private IHRDefinitionWrapper _db;
-
-        public IdentifierTypController(IHRDefinitionWrapper db)
+        private IHrLogWarpper _HrLog;
+        public IdentifierTypController(IHRDefinitionWrapper db, IHrLogWarpper HrLog)
         {
             _db = db;
+            _HrLog = HrLog;
         }
+
+
+
     }
 }

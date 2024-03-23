@@ -7,8 +7,7 @@ using System.Text;
 
 namespace NestHR.Authentication
 {
-    [Route("Auths")]
-   
+    [Route("Auths")]   
     public class AuthController : Controller
     {
         public static Users user = new Users();

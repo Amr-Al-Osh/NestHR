@@ -1,33 +1,37 @@
 ﻿using Domin.Models;
 using HRService.GeneralDefinitionService.Interfaces;
+using HRService.LogHR.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace NestHR.Controllers.GeneralDefinition
 {
     public class AreaController : Controller
     {
         private IHRDefinitionWrapper _db;
-        private ILogger _logger;
-        public AreaController(IHRDefinitionWrapper db, ILogger logger)
+        private IHrLogWarpper _HrLog;
+        public AreaController(IHRDefinitionWrapper db, IHrLogWarpper HrLog)
         {
             _db = db;
-            _logger = logger;
+            _HrLog = HrLog;
         }
 
         [Route("Area")]
         public async Task<IActionResult> Area()
         {
-
             var data = await _db.Area.ReadAllAsync();
 
             return View(data);
         }
 
+        #region =================> [Get Data]
+
         [HttpGet("GetAllArea")]
         public async Task<IActionResult> GetAllArea()
         {
+
             return Ok(await _db.Area.ReadAllAsync());
         }
 
@@ -94,6 +98,11 @@ namespace NestHR.Controllers.GeneralDefinition
             });
         }
 
+        #endregion
+
+
+        #region =================> [Operation On Data]
+
         [HttpPost("NewArea")]
         public async Task<IActionResult> NewArea([FromBody] Area model)
         {
@@ -116,24 +125,34 @@ namespace NestHR.Controllers.GeneralDefinition
                     await _db.Area.SaveChangesAsync();
 
                     var userNames = string.Join(", ", (await _db.Users.GetAllAsync()).Select(u => u.UserName));
-                    _logger.LogInformation($"User(s) {userNames} added new area: {model}");
 
+                    await _HrLog.UserLog.AddUserLogAsync(1, "userName", 1, $"Add New Area Name = {model.NameAr??model.NameEng} have Number = {model.AreaNum}");
 
                     return Ok(true);
                 }
                 else
                 {
-                    _logger.LogError("Invalid model state while adding new area: {@Model}", model);
+                    //_logger.LogError("Invalid model state while adding new area: {@Model}", model);
                     return BadRequest(ModelState);
                 }
+
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                ErrorLog error = await _HrLog.ErrorLog.AddErrorLogAsync(
+                    new ErrorLog
+                    {
+                        UserNumRef = 1,
+                        UserName = "userName",
+                        PlaceName = MethodBase.GetCurrentMethod()?.DeclaringType?.FullName ?? "",
+                        ExMessage = $"{ex.Message}",
+                        InnerExceptionMessage = $"{(ex.InnerException != null ? ex.InnerException.Message : "")}",
+                    });
 
                 return StatusCode(500, ex.Message);
             }
         }
+
 
         [HttpPost("EditeArea")]
         public async Task<IActionResult> EditeArea([FromBody] Area model)
@@ -157,8 +176,9 @@ namespace NestHR.Controllers.GeneralDefinition
 
                         await _db.Area.SaveChangesAsync();
 
-                        return Ok(true);
+                        await _HrLog.UserLog.AddUserLogAsync(1, "userName", 2, $"Edite Area Name = {model.NameAr ?? model.NameEng} have Number = {model.AreaNum}");
 
+                        return Ok(true);
                     }
                 }
                 else
@@ -168,9 +188,20 @@ namespace NestHR.Controllers.GeneralDefinition
             }
             catch (Exception ex)
             {
+                ErrorLog error = await _HrLog.ErrorLog.AddErrorLogAsync(
+                    new ErrorLog
+                    {
+                        UserNumRef = 1,
+                        UserName = "userName",
+                        PlaceName = MethodBase.GetCurrentMethod()?.DeclaringType?.FullName ?? "",
+                        ExMessage = $"{ex.Message}",
+                        InnerExceptionMessage = $"{(ex.InnerException != null ? ex.InnerException.Message : "")}",
+                    });
+
                 return StatusCode(500, ex.Message);
             }
         }
+
 
         [HttpPost("DealetArea")]
         public async Task<IActionResult> DealetArea(int areaNum)
@@ -179,20 +210,36 @@ namespace NestHR.Controllers.GeneralDefinition
             {
                 var existingArea = await _db.Area.GetByAsync(x => x.AreaNum == areaNum);
 
-                if (existingArea != null)
+                if (existingArea is null)
                 {
-                    _db.Area.Remove(existingArea);
-                    await _db.Area.SaveChangesAsync();
+                    return NotFound("Area not found.");
                 }
 
-                return NotFound("Area not found.");
+                _db.Area.Remove(existingArea);
+
+                await _db.Area.SaveChangesAsync();
+
+                await _HrLog.UserLog.AddUserLogAsync(1, "userName", 2, $"Delete Area Name = {existingArea.NameAr ?? existingArea.NameEng} have Number = {existingArea.AreaNum}");
+
+                return Ok(true);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                ErrorLog error = await _HrLog.ErrorLog.AddErrorLogAsync(
+                    new ErrorLog
+                    {
+                        UserNumRef = 1,
+                        UserName = "userName",
+                        PlaceName = MethodBase.GetCurrentMethod()?.DeclaringType?.FullName ?? "",
+                        ExMessage = $"{ex.Message}",
+                        InnerExceptionMessage = $"{(ex.InnerException != null ? ex.InnerException.Message : "")}",
+                    });
+
+                return StatusCode(500, error);
             }
         }
 
+        #endregion
 
     }
 }

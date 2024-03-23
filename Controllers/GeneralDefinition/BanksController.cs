@@ -1,6 +1,7 @@
 ﻿using Domin.Models;
 using HRService;
 using HRService.GeneralDefinitionService.Interfaces;
+using HRService.LogHR.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using NestHR.Models.GeneralDefinition;
 using System.Linq.Expressions;
@@ -10,10 +11,11 @@ namespace NestHR.Controllers.GeneralDefinition
     public class BanksController : Controller
     {
         private IHRDefinitionWrapper _db;
-
-        public BanksController(IHRDefinitionWrapper db)
+        private IHrLogWarpper _HrLog;
+        public BanksController(IHRDefinitionWrapper db, IHrLogWarpper HrLog)
         {
             _db = db;
+            _HrLog = HrLog;
         }
 
         [Route("Banks")]

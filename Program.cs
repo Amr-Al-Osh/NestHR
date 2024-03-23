@@ -1,7 +1,10 @@
 using Domin.Models;
 using HRService.GeneralDefinitionService;
 using HRService.GeneralDefinitionService.Interfaces;
+using HRService.LogHR;
+using HRService.LogHR.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 
 namespace NestHR
@@ -18,12 +21,13 @@ namespace NestHR
 
 
             builder.Services.AddControllersWithViews();
+            builder.Services.AddLogging();
 
             #region ============> [Scoped Genral]
 
             builder.Services.AddScoped<IHRDefinitionWrapper, HRDefinitionWrapper>();
-
-
+            builder.Services.AddScoped<IHrLogWarpper, HrLogWarpper>();
+     
             #endregion [Scoped Genral] 
 
             builder.Services.AddAuthentication().AddJwtBearer();

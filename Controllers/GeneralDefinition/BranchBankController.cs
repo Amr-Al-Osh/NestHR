@@ -1,4 +1,5 @@
 ﻿using HRService.GeneralDefinitionService.Interfaces;
+using HRService.LogHR.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace NestHR.Controllers.GeneralDefinition
@@ -7,9 +8,13 @@ namespace NestHR.Controllers.GeneralDefinition
     {
         private IHRDefinitionWrapper _db;
 
-        public BranchBankController(IHRDefinitionWrapper db)
+        private IHrLogWarpper _HrLog;
+        public BranchBankController(IHRDefinitionWrapper db, IHrLogWarpper HrLog)
         {
             _db = db;
+            _HrLog = HrLog;
         }
+
+
     }
 }
