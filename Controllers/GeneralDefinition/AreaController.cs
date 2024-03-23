@@ -125,7 +125,7 @@ namespace NestHR.Controllers.GeneralDefinition
 
                 await _db.Area.SaveChangesAsync();
 
-                await _db.UserLog.AddUserLogAsync(1, "userName", 1, $"Add New Area Name = {model.NameAr ?? model.NameEng} have Number = {model.AreaNum}");
+                await _db.UserLog.AddUserLogAsync(1, "userName", 1, $"Add New Area Name =[{model.NameAr ?? model.NameEng}] have Number = [{model.AreaNum}]");
 
                 return Ok(true);
 
@@ -159,7 +159,7 @@ namespace NestHR.Controllers.GeneralDefinition
 
                 if (existingArea is null)
                 {
-                    return NotFound($"Area with this number = {model.AreaNum} Not found.");
+                    return NotFound($"Area with this number = [{model.AreaNum}] Not found.");
                 }
 
                 var checkNameExist = area.Any(x => lang == 1 ?
@@ -173,10 +173,10 @@ namespace NestHR.Controllers.GeneralDefinition
 
                 if (isNameChangeConflict)
                 {
-                    return BadRequest($"An area with the same name '{model.NameAr ?? model.NameEng}' already exists.");
+                    return BadRequest($"An area with the same name [{model.NameAr ?? model.NameEng}] already exists.");
                 }
 
-                await _db.UserLog.AddUserLogAsync(1, "userName", 2, $"Edit Area with Number = {model.AreaNum} from Name = {(lang == 1 ? existingArea.NameAr : existingArea.NameEng)} to Name = {(lang == 1 ? model.NameAr : model.NameEng)}");
+                await _db.UserLog.AddUserLogAsync(1, "userName", 2, $"Edit Area with Number = [{model.AreaNum}] from Name = [{(lang == 1 ? existingArea.NameAr : existingArea.NameEng)}] to Name = [{(lang == 1 ? model.NameAr : model.NameEng)}]");
 
                 existingArea.NameEng = model.NameEng ?? "";
                 existingArea.NameAr = model.NameAr ?? "";
@@ -212,14 +212,14 @@ namespace NestHR.Controllers.GeneralDefinition
 
                 if (existingArea is null)
                 {
-                    return NotFound($"Area with this number = {areaNum} Not found.");
+                    return NotFound($"Area with this number = [{areaNum}] Not found.");
                 }
 
                 _db.Area.Remove(existingArea);
 
                 await _db.Area.SaveChangesAsync();
 
-                await _db.UserLog.AddUserLogAsync(1, "userName", 3, $"Delete Area Name = {existingArea.NameAr ?? existingArea.NameEng} have Number = {existingArea.AreaNum}");
+                await _db.UserLog.AddUserLogAsync(1, "userName", 3, $"Delete Area Name = [{existingArea.NameAr ?? existingArea.NameEng}] have Number = [{existingArea.AreaNum}]");
 
                 return Ok(true);
             }
