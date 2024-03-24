@@ -118,6 +118,12 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="lbl_Home" xml:space="preserve">
-    <value>Home France</value>
+    <value>Page d'accueil</value>
+  </data>
+  <data name="lbl_UserNotFound" xml:space="preserve">
+    <value>Le nom d'utilisateur ou le mot de passe est incorrect</value>
+  </data>
+  <data name="lbl_UserExist" xml:space="preserve">
+    <value>Le nom existe déjà</value>
   </data>
 </root>

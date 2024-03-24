@@ -1,17 +1,17 @@
 ﻿using Domin.Models;
 using HRService.GeneralDefinitionService.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-
+using NestHR.LanguageSupport;
 using System.Linq.Expressions;
 using System.Reflection;
 
 namespace NestHR.Controllers.GeneralDefinition
 {
-    public class AreaController : Controller
+    public class AreaController : HRBaseController
     {
-        private IHRDefinitionWrapper _db;
+        private readonly IHRDefinitionWrapper _db;
 
-        public AreaController(IHRDefinitionWrapper db)
+        public AreaController(IHRDefinitionWrapper db, LanguageService localization) : base(localization)
         {
             _db = db;
         }
