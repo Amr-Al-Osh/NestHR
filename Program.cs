@@ -56,11 +56,6 @@ namespace NestHR
                 });
 
             #endregion [Language Support]
-                
-
-            builder.Services.AddControllersWithViews()
-                .AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix)
-                .AddDataAnnotationsLocalization();
 
             #region ============> [Scoped Genral]
 
@@ -68,6 +63,10 @@ namespace NestHR
             builder.Services.AddScoped<IHrLogWarpper, HrLogWarpper>();
 
             #endregion [Scoped Genral] 
+
+            builder.Services.AddControllersWithViews()
+            .AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix)
+            .AddDataAnnotationsLocalization();
 
             builder.Services.AddAuthentication().AddJwtBearer();
 
