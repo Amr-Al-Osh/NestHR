@@ -45,7 +45,7 @@ namespace NestHR.Controllers.GeneralDefinition
         public async Task<IActionResult> Get() => Ok(await _db.Area.ReadAsync());
 
 
-        [HttpGet("GetBy/{areaNum}")]
+        [HttpGet("GetBy")]
         public async Task<IActionResult> GetBy(int areaNum)
         {
             var existArea = await _db.Area.GetByAsync(x => x.AreaNum == areaNum);
@@ -229,7 +229,7 @@ namespace NestHR.Controllers.GeneralDefinition
         }
 
 
-        [HttpDelete("Dealet/{areaNum}")]
+        [HttpDelete("Dealet")]
         public async Task<IActionResult> Dealet(int areaNum)
         {
             try
