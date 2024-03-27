@@ -10,10 +10,8 @@ namespace NestHR.Controllers.Authentication
     {
         private readonly IHRDefinitionWrapper _db;
 
-        public RegisterController(IHRDefinitionWrapper db, LanguageService localization) : base(localization)
-        {
-            _db = db;
-        }
+        public RegisterController(IHRDefinitionWrapper db, LanguageService localization, IConfiguration config, IHttpContextAccessor httpContextAccessor)
+            : base(localization, config, httpContextAccessor) => _db = db;
 
 
         [Route("Register")]
@@ -67,7 +65,7 @@ namespace NestHR.Controllers.Authentication
         {
             try
             {
-                var user = await _db.Users.GetAllAsync();
+                var user = await _db.Users.GetAsync();
 
                 var userExist = user.FirstOrDefault(x => x.UserNum == userModel.UserNum);
 

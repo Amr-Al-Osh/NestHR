@@ -42,7 +42,10 @@
     function GetData() {
         $.ajax({
             type: "GET",
-            url: "/GetAllArea",
+            url: "/Area/Get",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + "@ViewBag.Token");
+            },
             success: function (data) {
                 console.log(data);
                 var newRow = "";
@@ -67,12 +70,14 @@
         });
     }
 
-
     $("#add").on("click", function () {
         $.ajax({
             type: "GET",
-            url: "/GetMaxAreaNum",
+            url: "/Area/MaxNum",
             async: true,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + "@ViewBag.Token");
+            },
             success: function (max) {
                 $("#maxid").val(max);
             },
@@ -97,9 +102,12 @@
 
         $.ajax({
             type: "POST",
-            url: "/NewArea",
+            url: "/Area/Add",
             contentType: "application/json",
             data: JSON.stringify(data),
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + "@ViewBag.Token");
+            },
             success: function (data) {
                 console.log("NewArea " + data);
                 GetData();
@@ -126,9 +134,12 @@
 
         $.ajax({
             type: "Put",
-            url: "/EditeArea",
+            url: "/Area/Edite",
             contentType: "application/json",
             data: JSON.stringify(data),
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + "@ViewBag.Token");
+            },
             success: function (data) {
                 console.log("EditeArea " + data);
                 GetData();
@@ -143,7 +154,10 @@
     function EditTable(areaNum) {
         $.ajax({
             type: "GET",
-            url: "/GetAreaBy/" + areaNum,
+            url: "/Area/GetBy/" + areaNum,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + "@ViewBag.Token");
+            },
             success: function (data) {
                 $("#maxid").val(data.areaNum);
                 $("#nameAr").val(data.nameAr);
@@ -158,7 +172,10 @@
     function DeleteTable(areaNum) {
         $.ajax({
             type: "DELETE",
-            url: "/DealetArea/" + areaNum,
+            url: "/Area/Dealet/" + areaNum,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + "@ViewBag.Token");
+            },
             success: function (data) {
                 console.log("DealetArea " + data);
                 GetData();

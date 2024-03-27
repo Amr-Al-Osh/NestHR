@@ -1,37 +1,54 @@
 ﻿using Domin.Models;
 using HRService.GeneralDefinitionService.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NestHR.LanguageSupport;
+using System.Data;
 using System.Linq.Expressions;
 using System.Reflection;
 
 namespace NestHR.Controllers.GeneralDefinition
 {
+    [Authorize]
+    [Route("Area")]
     public class AreaController : HRBaseController
     {
         private readonly IHRDefinitionWrapper _db;
 
-        public AreaController(IHRDefinitionWrapper db, LanguageService localization) : base(localization)
+        public AreaController(IHRDefinitionWrapper db, LanguageService localization, IConfiguration config, IHttpContextAccessor httpContextAccessor)
+            : base(localization, config, httpContextAccessor) => _db = db;
+
+        [AllowAnonymous]
+        [Route("AreaPage")]
+        public IActionResult AreaPage()
         {
-            _db = db;
+            var token = CheckIfHaveToken();
+
+            if (token is null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            ViewBag.Token = token;
+
+            return View();
         }
 
 
-        [Route("Area")]
-        public IActionResult Area() => View();
-
         #region =================> [Get Data]
 
-        [HttpGet("GetMaxAreaNum")]
-        public async Task<IActionResult> GetMaxAreaNum() => Ok(await _db.Area.GetMaxAsync(x => x.AreaNum));
+        [HttpGet("MaxNum")]
+        public async Task<IActionResult> MaxNum() => Ok(await _db.Area.MaxAsync(x => x.AreaNum));
 
-        [HttpGet("GetAllArea")]
-        public async Task<IActionResult> GetAllArea() => Ok(await _db.Area.ReadAllAsync());
 
-        [HttpGet("GetAreaBy/{areaNum}")]
-        public IActionResult GetAreaBy(int areaNum)
+        [HttpGet("Get")]
+        public async Task<IActionResult> Get() => Ok(await _db.Area.ReadAsync());
+
+
+        [HttpGet("GetBy/{areaNum}")]
+        public async Task<IActionResult> GetBy(int areaNum)
         {
-            var existArea = _db.Area.GetBy(x => x.AreaNum == areaNum);
+            var existArea = await _db.Area.GetByAsync(x => x.AreaNum == areaNum);
 
             if (existArea.Count() == 0)
             {
@@ -41,8 +58,9 @@ namespace NestHR.Controllers.GeneralDefinition
             return Ok(existArea.FirstOrDefault());
         }
 
-        [HttpPost("GetDataTableArea")]
-        public async Task<IActionResult> GetDataTableArea()
+
+        [HttpPost("DataTable")]
+        public async Task<IActionResult> DataTable()
         {
             int totalRecord = 0;
             int filterRecord = 0;
@@ -54,7 +72,7 @@ namespace NestHR.Controllers.GeneralDefinition
             int pageSize = Convert.ToInt32(Request.Form["length"].FirstOrDefault() ?? "0");
             int skip = Convert.ToInt32(Request.Form["start"].FirstOrDefault() ?? "0");
 
-            var data = await _db.Area.ReadAllAsync();
+            var data = await _db.Area.ReadAsync();
 
             totalRecord = data.Count();
 
@@ -105,10 +123,11 @@ namespace NestHR.Controllers.GeneralDefinition
 
         #endregion
 
+
         #region =================> [Operation On Data]
 
-        [HttpPost("NewArea")]
-        public async Task<IActionResult> NewArea([FromBody] Area model)
+        [HttpPost("Add")]
+        public async Task<IActionResult> Add([FromBody] Area model)
         {
             try
             {
@@ -119,24 +138,29 @@ namespace NestHR.Controllers.GeneralDefinition
                     return BadRequest($"Area with the same name = {model.NameAr ?? model.NameEng} already exists.");
                 }
 
-                model.AreaNum = await _db.Area.GetMaxAsync(x => x.AreaNum);
+                model.AreaNum = await _db.Area.MaxAsync(x => x.AreaNum);
 
                 await _db.Area.AddAsync(model);
 
-                await _db.Area.SaveChangesAsync();
+                bool success = await _db.Area.SaveChangesAsync();
 
-                await _db.UserLog.AddUserLogAsync(1, "userName", 1, $"Add New Area Name =[{model.NameAr ?? model.NameEng}] have Number = [{model.AreaNum}]");
+                await _db.UserLog.AddUserLogAsync(
+                    userData.UserNum,
+                    userData.UserName,
+                    1,
+                    $"Add New Area Name = [{(userData.Lang == 1 ? model.NameAr : model.NameEng)}] with Number = [{model.AreaNum}]"
+                    );
 
-                return Ok(true);
+                return Ok(new { success });
 
             }
             catch (Exception ex)
             {
-                ErrorLog error = await _db.ErrorLog.AddErrorLogAsync(
+                await _db.ErrorLog.AddErrorLogAsync(
                     new ErrorLog
                     {
-                        UserNumRef = 1,
-                        UserName = "userName",
+                        UserNumRef = userData.UserNum,
+                        UserName = userData.UserName,
                         PlaceName = MethodBase.GetCurrentMethod()?.DeclaringType?.FullName ?? "",
                         ExMessage = $"{ex.Message}",
                         InnerExceptionMessage = $"{(ex.InnerException != null ? ex.InnerException.Message : "")}",
@@ -146,14 +170,15 @@ namespace NestHR.Controllers.GeneralDefinition
             }
         }
 
-        [HttpPut("EditeArea")]
-        public async Task<IActionResult> EditeArea([FromBody] Area model)
+
+        [HttpPut("Edite")]
+        public async Task<IActionResult> Edite([FromBody] Area model)
         {
             try
             {
                 int lang = 1;
 
-                var area = _db.Area.GetAll().ToList();
+                var area = await _db.Area.GetAsync();
 
                 var existingArea = area.FirstOrDefault(x => x.AreaNum == model.AreaNum);
 
@@ -176,24 +201,24 @@ namespace NestHR.Controllers.GeneralDefinition
                     return BadRequest($"An area with the same name [{model.NameAr ?? model.NameEng}] already exists.");
                 }
 
-                await _db.UserLog.AddUserLogAsync(1, "userName", 2, $"Edit Area with Number = [{model.AreaNum}] from Name = [{(lang == 1 ? existingArea.NameAr : existingArea.NameEng)}] to Name = [{(lang == 1 ? model.NameAr : model.NameEng)}]");
+                await _db.UserLog.AddUserLogAsync(userData.UserNum, userData.UserName, 2, $"Edit Area with Number = [{model.AreaNum}] from Name = [{(lang == 1 ? existingArea.NameAr : existingArea.NameEng)}] to Name = [{(lang == 1 ? model.NameAr : model.NameEng)}]");
 
                 existingArea.NameEng = model.NameEng ?? "";
                 existingArea.NameAr = model.NameAr ?? "";
 
                 _db.Area.Update(existingArea);
 
-                await _db.Area.SaveChangesAsync();
+                bool success = await _db.Area.SaveChangesAsync();
 
-                return Ok(true);
+                return Ok(new { success });
             }
             catch (Exception ex)
             {
-                ErrorLog error = _db.ErrorLog.AddErrorLog(
+                await _db.ErrorLog.AddErrorLogAsync(
                     new ErrorLog
                     {
-                        UserNumRef = 1,
-                        UserName = "userName",
+                        UserNumRef = userData.UserNum,
+                        UserName = userData.UserName,
                         PlaceName = MethodBase.GetCurrentMethod()?.DeclaringType?.FullName ?? "",
                         ExMessage = $"{ex.Message}",
                         InnerExceptionMessage = $"{(ex.InnerException != null ? ex.InnerException.Message : "")}",
@@ -203,8 +228,9 @@ namespace NestHR.Controllers.GeneralDefinition
             }
         }
 
-        [HttpDelete("DealetArea/{areaNum}")]
-        public async Task<IActionResult> DealetArea(int areaNum)
+
+        [HttpDelete("Dealet/{areaNum}")]
+        public async Task<IActionResult> Dealet(int areaNum)
         {
             try
             {
@@ -217,25 +243,25 @@ namespace NestHR.Controllers.GeneralDefinition
 
                 _db.Area.Remove(existingArea);
 
-                await _db.Area.SaveChangesAsync();
+                bool success = await _db.Area.SaveChangesAsync();
 
-                await _db.UserLog.AddUserLogAsync(1, "userName", 3, $"Delete Area Name = [{existingArea.NameAr ?? existingArea.NameEng}] have Number = [{existingArea.AreaNum}]");
+                await _db.UserLog.AddUserLogAsync(userData.UserNum, userData.UserName, 3, $"Delete Area Name = [{existingArea.NameAr ?? existingArea.NameEng}] have Number = [{existingArea.AreaNum}]");
 
-                return Ok(true);
+                return Ok(new { success });
             }
             catch (Exception ex)
             {
-                ErrorLog error = await _db.ErrorLog.AddErrorLogAsync(
+                await _db.ErrorLog.AddErrorLogAsync(
                     new ErrorLog
                     {
-                        UserNumRef = 1,
-                        UserName = "userName",
+                        UserNumRef = userData.UserNum,
+                        UserName = userData.UserName,
                         PlaceName = MethodBase.GetCurrentMethod()?.DeclaringType?.FullName ?? "",
                         ExMessage = $"{ex.Message}",
                         InnerExceptionMessage = $"{(ex.InnerException != null ? ex.InnerException.Message : "")}",
                     });
 
-                return StatusCode(500, error);
+                return StatusCode(500, ex.Message);
             }
         }
 
