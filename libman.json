@@ -1,0 +1,291 @@
+{
+  "version": "1.0",
+  "defaultProvider": "unpkg",
+  "libraries": [
+
+    {
+      "provider": "unpkg",
+      "library": "jquery@3.7.1",
+      "destination": "wwwroot/lib/jquery/",
+      "files": [
+        "dist/jquery.js",
+        "dist/jquery.min.js",
+        "dist/jquery.min.map",
+        "LICENSE.txt"
+      ]
+    },
+
+
+    {
+      "provider": "unpkg",
+      "library": "sweetalert2@11.10.7",
+      "destination": "wwwroot/plugins/sweetalert2/",
+      "files": [
+        "LICENSE",
+        "dist/sweetalert2.css",
+        "dist/sweetalert2.all.min.js",
+        "dist/sweetalert2.all.js",
+        "dist/sweetalert2.js",
+        "dist/sweetalert2.min.css",
+        "dist/sweetalert2.min.js"
+      ]
+    },
+    {
+      "provider": "unpkg",
+      "library": "bootstrap@5.3.3",
+      "destination": "wwwroot/lib/bootstrap",
+      "files": [
+        "scss/bootstrap-grid.scss",
+        "scss/bootstrap-reboot.scss",
+        "scss/bootstrap-utilities.scss",
+        "scss/bootstrap.scss",
+        "scss/_accordion.scss",
+        "scss/_alert.scss",
+        "scss/_badge.scss",
+        "scss/_breadcrumb.scss",
+        "scss/_button-group.scss",
+        "scss/_buttons.scss",
+        "scss/_card.scss",
+        "scss/_carousel.scss",
+        "scss/_close.scss",
+        "scss/_containers.scss",
+        "scss/_dropdown.scss",
+        "scss/_forms.scss",
+        "scss/_functions.scss",
+        "scss/_grid.scss",
+        "scss/_helpers.scss",
+        "scss/_images.scss",
+        "scss/_list-group.scss",
+        "scss/_maps.scss",
+        "scss/_mixins.scss",
+        "scss/_modal.scss",
+        "scss/_nav.scss",
+        "scss/_navbar.scss",
+        "scss/_offcanvas.scss",
+        "scss/_pagination.scss",
+        "scss/_placeholders.scss",
+        "scss/_popover.scss",
+        "scss/_progress.scss",
+        "scss/_reboot.scss",
+        "scss/_root.scss",
+        "scss/_spinners.scss",
+        "scss/_tables.scss",
+        "scss/_toasts.scss",
+        "scss/_tooltip.scss",
+        "scss/_transitions.scss",
+        "scss/_type.scss",
+        "scss/_utilities.scss",
+        "scss/_variables-dark.scss",
+        "scss/_variables.scss",
+        "scss/forms/_floating-labels.scss",
+        "scss/forms/_form-check.scss",
+        "scss/forms/_form-control.scss",
+        "scss/forms/_form-range.scss",
+        "scss/forms/_form-select.scss",
+        "scss/forms/_form-text.scss",
+        "scss/forms/_input-group.scss",
+        "scss/forms/_labels.scss",
+        "scss/forms/_validation.scss",
+        "scss/helpers/_clearfix.scss",
+        "scss/helpers/_color-bg.scss",
+        "scss/helpers/_colored-links.scss",
+        "scss/helpers/_focus-ring.scss",
+        "scss/helpers/_icon-link.scss",
+        "scss/helpers/_position.scss",
+        "scss/helpers/_ratio.scss",
+        "scss/helpers/_stacks.scss",
+        "scss/helpers/_stretched-link.scss",
+        "scss/helpers/_text-truncation.scss",
+        "scss/helpers/_visually-hidden.scss",
+        "scss/helpers/_vr.scss",
+        "scss/mixins/_alert.scss",
+        "scss/mixins/_backdrop.scss",
+        "scss/mixins/_banner.scss",
+        "scss/mixins/_border-radius.scss",
+        "scss/mixins/_box-shadow.scss",
+        "scss/mixins/_breakpoints.scss",
+        "scss/mixins/_buttons.scss",
+        "scss/mixins/_caret.scss",
+        "scss/mixins/_clearfix.scss",
+        "scss/mixins/_color-mode.scss",
+        "scss/mixins/_color-scheme.scss",
+        "scss/mixins/_container.scss",
+        "scss/mixins/_deprecate.scss",
+        "scss/mixins/_forms.scss",
+        "scss/mixins/_gradients.scss",
+        "scss/mixins/_grid.scss",
+        "scss/mixins/_image.scss",
+        "scss/mixins/_list-group.scss",
+        "scss/mixins/_lists.scss",
+        "scss/mixins/_pagination.scss",
+        "scss/mixins/_reset-text.scss",
+        "scss/mixins/_resize.scss",
+        "scss/mixins/_table-variants.scss",
+        "scss/mixins/_text-truncate.scss",
+        "scss/mixins/_transition.scss",
+        "scss/mixins/_utilities.scss",
+        "scss/mixins/_visually-hidden.scss",
+        "scss/utilities/_api.scss",
+        "scss/vendor/_rfs.scss",
+        "LICENSE",
+        "dist/js/bootstrap.bundle.js",
+        "dist/js/bootstrap.bundle.js.map",
+        "dist/js/bootstrap.bundle.min.js",
+        "dist/js/bootstrap.bundle.min.js.map",
+        "dist/css/bootstrap-grid.min.css",
+        "dist/css/bootstrap-grid.min.css.map",
+        "dist/js/bootstrap.js",
+        "dist/js/bootstrap.js.map",
+        "dist/js/bootstrap.min.js",
+        "dist/js/bootstrap.min.js.map",
+        "dist/css/bootstrap-grid.rtl.min.css",
+        "dist/css/bootstrap-grid.rtl.min.css.map",
+        "dist/css/bootstrap-reboot.min.css",
+        "dist/css/bootstrap-reboot.min.css.map",
+        "dist/css/bootstrap-reboot.rtl.min.css",
+        "dist/css/bootstrap-reboot.rtl.min.css.map",
+        "dist/css/bootstrap-utilities.min.css",
+        "dist/css/bootstrap-utilities.min.css.map",
+        "dist/css/bootstrap-utilities.rtl.min.css",
+        "dist/css/bootstrap-utilities.rtl.min.css.map",
+        "dist/css/bootstrap.min.css",
+        "dist/css/bootstrap.min.css.map",
+        "dist/css/bootstrap.rtl.min.css",
+        "dist/css/bootstrap.rtl.min.css.map"
+      ]
+    },
+    {
+      "provider": "unpkg",
+      "library": "select2@4.1.0-rc.0",
+      "destination": "wwwroot/plugins/select2/",
+      "files": [
+        "LICENSE.md",
+        "dist/css/select2.min.css",
+        "dist/js/select2.min.js"
+      ]
+    },
+    {
+      "provider": "unpkg",
+      "library": "jszip@3.10.1",
+      "destination": "wwwroot/plugins/DataTables/jszip/",
+      "files": [
+        "dist/jszip.min.js",
+        "vendor/FileSaver.js",
+        "lib/reader/ArrayReader.js",
+        "lib/reader/DataReader.js",
+        "lib/reader/NodeBufferReader.js",
+        "lib/reader/readerFor.js",
+        "lib/reader/StringReader.js",
+        "lib/reader/Uint8ArrayReader.js",
+        "lib/stream/ConvertWorker.js",
+        "lib/stream/Crc32Probe.js",
+        "lib/stream/DataLengthProbe.js",
+        "lib/stream/DataWorker.js",
+        "lib/stream/GenericWorker.js",
+        "lib/stream/StreamHelper.js",
+        "lib/generate/index.js",
+        "lib/generate/ZipFileWorker.js",
+        "lib/zipObject.js",
+        "lib/zipEntries.js",
+        "lib/zipEntry.js",
+        "lib/utils.js",
+        "lib/utf8.js",
+        "lib/support.js",
+        "lib/signature.js",
+        "lib/readable-stream-browser.js",
+        "lib/object.js",
+        "lib/nodejsUtils.js",
+        "lib/load.js",
+        "lib/index.js",
+        "lib/flate.js",
+        "lib/external.js",
+        "lib/defaults.js",
+        "lib/crc32.js",
+        "lib/compressions.js",
+        "lib/compressedObject.js",
+        "lib/base64.js",
+        "LICENSE.markdown"
+      ]
+    },
+    {
+      "provider": "unpkg",
+      "library": "pdfmake@0.2.10",
+      "destination": "wwwroot/plugins/DataTables/pdfmake/",
+      "files": [
+        "LICENSE",
+        "build/pdfmake.min.js",
+        "build/pdfmake.min.js.map"
+      ]
+    },
+    {
+      "provider": "unpkg",
+      "library": "datatables.net-buttons-bs5@3.0.1",
+      "destination": "wwwroot/plugins/DataTables/datatables.net-buttons-bs5/",
+      "files": [
+        "License.txt",
+        "css/buttons.bootstrap5.min.css",
+        "js/buttons.bootstrap5.min.js"
+      ]
+    },
+    {
+      "provider": "unpkg",
+      "library": "datatables.net-fixedcolumns-bs5@5.0.0",
+      "destination": "wwwroot/plugins/DataTables/datatables.net-fixedcolumns-bs5/",
+      "files": [
+        "License.txt",
+        "css/fixedColumns.bootstrap5.min.css",
+        "js/fixedColumns.bootstrap5.min.js"
+      ]
+    },
+    {
+      "provider": "unpkg",
+      "library": "datatables.net-responsive-bs5@3.0.1",
+      "destination": "wwwroot/plugins/DataTables/datatables.net-responsive-bs5/",
+      "files": [
+        "js/responsive.bootstrap5.min.js",
+        "License.txt",
+        "css/responsive.bootstrap5.min.css"
+      ]
+    },
+    {
+      "provider": "unpkg",
+      "library": "datatables.net-scroller-bs5@2.4.1",
+      "destination": "wwwroot/plugins/DataTables/datatables.net-scroller-bs5/",
+      "files": [
+        "css/scroller.bootstrap5.min.css",
+        "License.txt",
+        "js/scroller.bootstrap5.min.js"
+      ]
+    },
+    {
+      "provider": "unpkg",
+      "library": "datatables.net-bs5@2.0.3",
+      "destination": "wwwroot/plugins/DataTables/datatables.net-bs5/"
+    },
+    {
+      "provider": "unpkg",
+      "library": "datatables.net@2.0.3",
+      "destination": "wwwroot/plugins/DataTables/datatables.net/",
+      "files": [
+        "js/dataTables.min.js"
+      ]
+    },
+    {
+      "provider": "unpkg",
+      "library": "jquery-validation@1.20.0",
+      "destination": "wwwroot/lib/jquery/jquery-validation/",
+      "files": [
+        "dist/jquery.validate.min.js"
+      ]
+    }
+  ,
+{
+  "provider": "unpkg",
+  "library": "jquery-validation-unobtrusive@4.0.0",
+  "destination": "wwwroot/lib/jquery/jquery-validation-unobtrusive/",
+  "files": [
+    "dist/jquery.validate.unobtrusive.min.js"
+  ]
+}
+]
+}

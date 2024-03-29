@@ -19,7 +19,6 @@ namespace NestHR.Controllers
 
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
-
         public void SaveUserInCookies(User userModel)
         {
             var httpContext = _httpContextAccessor.HttpContext;
