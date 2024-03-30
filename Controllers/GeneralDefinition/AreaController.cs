@@ -9,7 +9,7 @@ using System.Reflection;
 
 namespace NestHR.Controllers.GeneralDefinition
 {
-    [Authorize]
+
     [Route("Area")]
     public class AreaController : HRBaseController
     {
@@ -18,7 +18,6 @@ namespace NestHR.Controllers.GeneralDefinition
         public AreaController(IHRDefinitionWrapper db, LanguageService localization, IConfiguration config, IHttpContextAccessor httpContextAccessor)
             : base(localization, config, httpContextAccessor) => _db = db;
 
-        [AllowAnonymous]
         [Route("AreaPage")]
         public IActionResult AreaPage()
         {
@@ -33,7 +32,6 @@ namespace NestHR.Controllers.GeneralDefinition
 
             return View();
         }
-
 
         #region =================> [Get Data]
 
@@ -123,7 +121,6 @@ namespace NestHR.Controllers.GeneralDefinition
 
         #endregion
 
-
         #region =================> [Operation On Data]
 
         [HttpPost("Add")]
@@ -187,9 +184,11 @@ namespace NestHR.Controllers.GeneralDefinition
                     return NotFound($"Area with this number = [{model.AreaNum}] Not found.");
                 }
 
+
                 var checkNameExist = area.Any(x => lang == 1 ?
-                    (x.NameAr ?? "").Equals(model.NameAr ?? "", StringComparison.CurrentCultureIgnoreCase) :
-                    (x.NameEng ?? "").Equals(model.NameEng ?? "", StringComparison.CurrentCultureIgnoreCase));
+                (x.NameAr != null && x.NameAr.ToUpper() == model.NameAr.ToUpper()) :
+                (x.NameEng != null && x.NameEng.ToUpper() == model.NameEng.ToUpper()));
+
 
                 var isNameChangeConflict = checkNameExist ? (lang == 1 ?
                     !(existingArea.NameAr ?? "").Equals(model.NameAr ?? "", StringComparison.CurrentCultureIgnoreCase) :

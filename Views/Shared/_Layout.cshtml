@@ -29,7 +29,6 @@
         <!--==============================================================-->
         @await Html.PartialAsync("Components/_Nav")
 
-
         <!--==============================================================-->
         <!--==================== [Sidebar] ===============================-->
         <!--==============================================================-->
@@ -92,12 +91,24 @@
             RemoveBtnLoader($btn, btnText);
         });
 
+        $(".btn-loader-Server").on("click", function () {
+            let $btn = $(this);
+            var btnData = addBtnLoader($btn);         
+            RemoveBtnLoader(btnData.btnRef, btnData.oldbtnText);
+        });
+
+        function addBtnLoader(btnRef) {
+            let oldbtnText = btnRef.text();
+            btnRef.addClass("disabled");
+            btnRef.html('<i class="spinner-border mx-2" style="width: 1rem; height: 1rem;"></i>' + oldbtnText);
+            return { btnRef, oldbtnText }
+        }
 
         function RemoveBtnLoader(btnRef, oldbtnText) {
             setTimeout(function () {
                 btnRef.removeClass("disabled");
                 btnRef.html(oldbtnText);
-            }, 2000);
+            }, 500);
         }
     </script>
 </body>

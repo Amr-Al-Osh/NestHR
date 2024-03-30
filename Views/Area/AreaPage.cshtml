@@ -1,8 +1,6 @@
-﻿
-
-<button class="btn btn-info" id="add">Max</button>
-<button class="btn btn-success" id="New">New</button>
-<button class="btn btn-primary" id="edit">edite</button>
+﻿<button class="btn btn-info btn-loader-Server" id="add">Max</button>
+<button class="btn btn-success btn-loader" id="New">New</button>
+<button class="btn btn-primary btn-loader" id="edit">edite</button>
 
 <div class="row">
     <div class="col-4 my-3">
@@ -71,6 +69,11 @@
     }
 
     $("#add").on("click", function () {
+
+        let $btn = $(this);
+        var btnData = addBtnLoader($btn);
+       
+
         $.ajax({
             type: "GET",
             url: "/Area/MaxNum",
@@ -80,6 +83,7 @@
             },
             success: function (max) {
                 $("#maxid").val(max);
+                RemoveBtnLoader(btnData.btnRef, btnData.oldbtnText);
             },
             error: function (xhr, status, error) {
                 console.log(error);
@@ -154,7 +158,8 @@
     function EditTable(areaNum) {
         $.ajax({
             type: "GET",
-            url: "/Area/GetBy/" + areaNum,
+            url: "/Area/GetBy/",
+            data: { areaNum : areaNum },
             beforeSend: function (xhr) {
                 xhr.setRequestHeader('Authorization', 'Bearer ' + "@ViewBag.Token");
             },
@@ -172,7 +177,8 @@
     function DeleteTable(areaNum) {
         $.ajax({
             type: "DELETE",
-            url: "/Area/Dealet/" + areaNum,
+            url: "/Area/Dealet/",
+            data: { areaNum: areaNum },
             beforeSend: function (xhr) {
                 xhr.setRequestHeader('Authorization', 'Bearer ' + "@ViewBag.Token");
             },

@@ -257,11 +257,7 @@
         "js/scroller.bootstrap5.min.js"
       ]
     },
-    {
-      "provider": "unpkg",
-      "library": "datatables.net-bs5@2.0.3",
-      "destination": "wwwroot/plugins/DataTables/datatables.net-bs5/"
-    },
+
     {
       "provider": "unpkg",
       "library": "datatables.net@2.0.3",
@@ -2345,6 +2341,15 @@
       "destination": "wwwroot/lib/popper.js/",
       "files": [
         "umd/popper.min.js"
+      ]
+    },
+    {
+      "provider": "unpkg",
+      "library": "datatables.net-bs5@2.0.3",
+      "destination": "wwwroot/plugins/DataTables/datatables.net-bs5/",
+      "files": [
+        "css/dataTables.bootstrap5.min.css",
+        "js/dataTables.bootstrap5.min.js"
       ]
     }
   ]
