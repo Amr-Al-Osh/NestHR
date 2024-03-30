@@ -21,7 +21,7 @@
 
 </head>
 
-<body class="text-sm control-sidebar-slide-open layout-fixed sidebar-mini layout-navbar-fixed">
+<body class="text-sm layout-fixed sidebar-mini layout-navbar-fixed">
     <div class="wrapper">
 
         <!--==============================================================-->
@@ -61,7 +61,7 @@
         <!--==============================================================-->
         <!--==================== [footer] ===============================-->
         <!--==============================================================-->
-        @await Html.PartialAsync("Components/_Footer")
+      
 
 
     </div>
@@ -110,6 +110,66 @@
                 btnRef.html(oldbtnText);
             }, 500);
         }
+
+        $('#darkmood').change(function () {
+            if ($(this).is(':checked')) {
+
+                $('.sidebar').removeClass('os-theme-dark');
+                $('.main-sidebar').removeClass('sidebar-light-success');
+                $('nav.main-header').removeClass('navbar-white');
+                $('nav.main-header').removeClass('navbar-light');
+
+                $('body').addClass('dark-mode');
+                $('.main-sidebar').addClass('sidebar-dark-success');
+                $('.sidebar').addClass('os-theme-light');
+                $('nav.main-header').addClass('os-theme-light');
+
+                $('nav.main-header').addClass('navbar-black');
+                $('nav.main-header').addClass('navbar-dark');
+
+  
+            } else {
+      
+                $('body').removeClass('dark-mode');
+                $('.main-sidebar').removeClass('sidebar-dark-success');
+                $('.sidebar').removeClass('os-theme-light');
+                $('nav.main-header').removeClass('navbar-black');
+                $('nav.main-header').removeClass('navbar-dark');
+
+                $('nav.main-header').addClass('navbar-white');
+                $('nav.main-header').addClass('navbar-light');
+                $('.main-sidebar').addClass('sidebar-light-success');         
+                $('.sidebar').addClass('os-theme-dark');
+            }
+        });
+
+
+        // function toggleSidebarClosedClass() {
+        //     if ($(window).width() < 768 && $('body').hasClass('sidebar-open')) {
+        //         $('body').addClass('sidebar-closed');
+        //         $('body').addClass('sidebar-collapse');
+
+        //         $('body').removeClass('sidebar-open');
+        //     } else {
+        //         $('body').removeClass('sidebar-closed');
+        //         $('body').removeClass('sidebar-collapse');
+
+        //         $('body').addClass('sidebar-open');
+
+        //     }
+        // }
+
+        // $(window).resize(function () {
+        //     toggleSidebarClosedClass();
+        // });
+
+
+        // // Event listener for the pushmenu button
+        // $('[data-widget="pushmenu"]').on('click', function () {
+        //     toggleSidebarClosedClass();    
+        // });
+  
+
     </script>
 </body>
 </html>
