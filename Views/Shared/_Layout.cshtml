@@ -1,12 +1,11 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - MyTemplet</title>
+    <title>@ViewData["Title"]-Nest-HR</title>
 
-    <!--==================== [jquery] =======================================-->
+    <!--==================== [jquery] ======================================-->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
     <!--==================== [Font Awesome 6.5.1] ==========================-->
@@ -16,7 +15,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link href="~/lib/bootstrap/dist/css/bootstrap-utilities.min.css" rel="stylesheet" />
 
-    <!--==================== [Nest Admin Templet] ======================-->
+    <!--==================== [Nest Admin Templet] =========================-->
     <link rel="stylesheet" href="~/nestadmintemplet/css/neststyle.css" />
 
 </head>
@@ -59,25 +58,22 @@
         </div>
 
         <!--==============================================================-->
-        <!--==================== [footer] ===============================-->
+        <!--==================== [footer] ================================-->
         <!--==============================================================-->
-      
-
 
     </div>
 
-
     <!--=============================================================-->
-    <!--==================== [script] ===============================-->
-    <!--=============================================================-->
-    <!--==================== [Bootstrap 5.3] ===============================-->
+    <!--==================== [Bootstrap 5.3] ========================-->
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <!--==================== [Font Awesome 6.5.1] ==========================-->
+
+    <!--==================== [Font Awesome 6.5.1] ===================-->
     <script src="~/font/fortawesome/fontawesome-free/js/all.min.js"></script>
-    <!--==================== [popper] ==========================-->
+
+    <!--==================== [popper] ===============================-->
     <script src="~/lib/popper.js/umd/popper.min.js"></script>
 
-
+    <!--==================== [Page script] ==========================-->
     <script>
 
         $("#btnGen").html(`<button class="btn btn-info btn-loader"> Add New </button>`);
@@ -93,7 +89,7 @@
 
         $(".btn-loader-Server").on("click", function () {
             let $btn = $(this);
-            var btnData = addBtnLoader($btn);         
+            var btnData = addBtnLoader($btn);
             RemoveBtnLoader(btnData.btnRef, btnData.oldbtnText);
         });
 
@@ -127,9 +123,9 @@
                 $('nav.main-header').addClass('navbar-black');
                 $('nav.main-header').addClass('navbar-dark');
 
-  
+
             } else {
-      
+
                 $('body').removeClass('dark-mode');
                 $('.main-sidebar').removeClass('sidebar-dark-success');
                 $('.sidebar').removeClass('os-theme-light');
@@ -138,37 +134,10 @@
 
                 $('nav.main-header').addClass('navbar-white');
                 $('nav.main-header').addClass('navbar-light');
-                $('.main-sidebar').addClass('sidebar-light-success');         
+                $('.main-sidebar').addClass('sidebar-light-success');
                 $('.sidebar').addClass('os-theme-dark');
             }
         });
-
-
-        // function toggleSidebarClosedClass() {
-        //     if ($(window).width() < 768 && $('body').hasClass('sidebar-open')) {
-        //         $('body').addClass('sidebar-closed');
-        //         $('body').addClass('sidebar-collapse');
-
-        //         $('body').removeClass('sidebar-open');
-        //     } else {
-        //         $('body').removeClass('sidebar-closed');
-        //         $('body').removeClass('sidebar-collapse');
-
-        //         $('body').addClass('sidebar-open');
-
-        //     }
-        // }
-
-        // $(window).resize(function () {
-        //     toggleSidebarClosedClass();
-        // });
-
-
-        // // Event listener for the pushmenu button
-        // $('[data-widget="pushmenu"]').on('click', function () {
-        //     toggleSidebarClosedClass();    
-        // });
-  
 
     </script>
 </body>

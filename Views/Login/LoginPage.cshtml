@@ -1,92 +1,99 @@
-﻿<style>
+﻿<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nest-Login</title>
 
-    .btn-color {
-        background-color: #0e1c36;
-        color: #fff;
-    }
+    <!--==================== [jquery] =======================================-->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
-    .profile-image-pic {
-        height: 200px;
-        width: 200px;
-        object-fit: cover;
-    }
+    <!--==================== [Font Awesome 6.5.1] ==========================-->
+    <link href="~/font/fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet" />
 
+    <!--==================== [Bootstrap 5.3] ===============================-->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-utilities.min.css" rel="stylesheet" />
 
+    <!--==================== [Nest Admin Templet] ======================-->
+    <link rel="stylesheet" href="~/nestadmintemplet/css/neststyle.css" />
 
-    .cardbody-color {
-        background-color: #ebf2fa;
-    }
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
 
-    a {
-        text-decoration: none;
-    }
+                <div class="card my-5">
 
-</style>
+                    <form class="card-body cardbody-color p-lg-5">
 
+                        <div class="text-center">
+                            <img src="https://cdn.pixabay.com/photo/2016/03/31/19/56/avatar-1295397__340.png" class="img-fluid profile-image-pic img-thumbnail rounded-circle my-3"
+                                 width="200px" alt="profile">
+                        </div>
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-6 offset-md-3">
+                        <div class="mb-3">
+                            <input type="text" class="form-control" id="Username" aria-describedby="emailHelp"
+                                   placeholder="User Name">
+                        </div>
+                        <div class="mb-3">
+                            <input type="password" class="form-control" id="password" placeholder="password">
+                        </div>
+                        <div class="text-center"><button type="button" onclick="Login()" class="btn btn-color px-5 mb-5 w-100">Login</button></div>
 
-            <div class="card my-5">
+                    </form>
+                </div>
 
-                <form class="card-body cardbody-color p-lg-5">
-
-                    <div class="text-center">
-                        <img src="https://cdn.pixabay.com/photo/2016/03/31/19/56/avatar-1295397__340.png" class="img-fluid profile-image-pic img-thumbnail rounded-circle my-3"
-                             width="200px" alt="profile">
-                    </div>
-
-                    <div class="mb-3">
-                        <input type="text" class="form-control" id="Username" aria-describedby="emailHelp"
-                               placeholder="User Name">
-                    </div>
-                    <div class="mb-3">
-                        <input type="password" class="form-control" id="password" placeholder="password">
-                    </div>
-                    <div class="text-center"><button type="button" onclick="Login()" class="btn btn-color px-5 mb-5 w-100">Login</button></div>
-
-                </form>
             </div>
-
         </div>
     </div>
-</div>
 
-<script>
-    class User {
-        constructor() {
-            this.UserNum = 0;
-            this.UserName = "";
-            this.Password = "";
-            this.Lang = 1;
-            this.Theam = 1;
-        }
-    }
-
-    function Login() {
-        let user = new User();
-
-        user.UserName = $("#Username").val();
-        user.Password = $("#password").val();
-
-        $.ajax({
-            type: "POST",
-            url: "/CheakLoginManager", // Adjusted URL
-            contentType: "application/json",
-            data: JSON.stringify(user),
-            success: function (Token) {
-                window.location.href = "/Area/AreaPage";
-            },
-            error: function (xhr, status, error) {
-                console.log(xhr.responseText);
+    <!--=============================================================-->
+    <!--==================== [Bootstrap 5.3] ========================-->
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!--==================== [Font Awesome 6.5.1] ===================-->
+    <script src="~/font/fortawesome/fontawesome-free/js/all.min.js"></script>
+    <!--==================== [popper] ===============================-->
+    <script src="~/lib/popper.js/umd/popper.min.js"></script>
+    <!--==================== [Page script] ==========================-->
+    <script>
+        class User {
+            constructor() {
+                this.UserNum = 0;
+                this.UserName = "";
+                this.Password = "";
+                this.Lang = 1;
+                this.Theam = 1;
             }
-        });
-    }
+        }
+
+        function Login() {
+            let user = new User();
+
+            user.UserName = $("#Username").val();
+            user.Password = $("#password").val();
+
+            $.ajax({
+                type: "POST",
+                url: "/CheakLoginManager", // Adjusted URL
+                contentType: "application/json",
+                data: JSON.stringify(user),
+                success: function (Token) {
+                    window.location.href = "/Area/AreaPage";
+                },
+                error: function (xhr, status, error) {
+                    console.log(xhr.responseText);
+                }
+            });
+        }
+
+    </script>
+
+
+</body>
+</html>
 
 
 
-
-
-</script>
