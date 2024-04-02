@@ -1,0 +1,86 @@
+﻿
+#sidebar {
+    transition: all 0.5s;
+}
+
+.NestSaidBar {
+    width: 250px;
+    left: 0;
+    top: 0;
+    height: 100%;
+    position: fixed;
+    transition: width 0.5s;
+    overflow: hidden;
+}
+
+
+#sidebar.active {
+    width: 100%;
+    transition: all 1s;
+}
+
+[dir="ltr"] .NestSaidBar {
+    left: 0;
+}
+
+[dir="rtl"] .NestSaidBar {
+    right: 0;
+}
+
+.hideSidebar {
+    width: 73px;
+
+    transition: width 0.5s;
+}
+
+    .hideSidebar .active {
+        width: 3rem;
+        transition: all 1s;
+    }
+
+    .hideSidebar .nav-link {
+        white-space: nowrap;
+    }
+
+        .hideSidebar .nav-link span.text {
+            display: none;
+            transition: display 0.5s;
+        }
+
+    .hideSidebar:hover {
+        width: 250px;
+    }
+
+
+
+
+.dropdown-toggle::after {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    vertical-align: 0.255em;
+    content: "";
+    border-top: 0.3em solid;
+    border-right: 0.3em solid transparent;
+    border-bottom: 0;
+    border-left: 0.3em solid transparent;
+}
+
+.show.dropdown-toggle::after {
+    transform: rotate(180deg);
+}
+
+.Nest-Logo {
+    height: 2.2rem;
+    text-decoration: none;
+    color: black;
+    width: 14rem;
+}
+
+    .Nest-Logo img {
+        max-width: 4rem;
+        width: 4rem;
+        max-height: 4rem;
+        height: 59px !important;
+        margin-left: -10px !important;
+    }

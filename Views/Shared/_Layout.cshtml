@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="en"  data-bs-theme="light"  >
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,15 +12,19 @@
     <link href="~/font/fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet" />
 
     <!--==================== [Bootstrap 5.3] ===============================-->
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/dist/css/bootstrap-utilities.min.css" rel="stylesheet" />
 
+   @*  <link href="~/lib/bootstrap/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-utilities.rtl.min.css" rel="stylesheet" /> *@
+
     <!--==================== [Nest Admin Templet] =========================-->
-    <link rel="stylesheet" href="~/nestadmintemplet/css/neststyle.css" />
+    <link href="~/nestadmintemplet/css/nesttemplet.css" rel="stylesheet" />
+@*     <link rel="stylesheet" href="~/nestadmintemplet/css/neststyle.css" /> *@
 
 </head>
 
-<body class="text-sm layout-fixed sidebar-mini layout-navbar-fixed">
+<body>
     <div class="wrapper">
 
         <!--==============================================================-->
@@ -31,26 +35,14 @@
         <!--==============================================================-->
         <!--==================== [Sidebar] ===============================-->
         <!--==============================================================-->
-        @await Html.PartialAsync("Components/_Sidebar")
+        @*@await Html.PartialAsync("Components/_Sidebar") *@
+        @await Html.PartialAsync("Components/_Sidebar2")
 
         <!--==============================================================-->
         <!--==================== [Content] ===============================-->
         <!--==============================================================-->
-        <div class="content-wrapper pading25 pt-4">
-            <div class="content pading25 rounded-2">
-                <div class="content-header">
-                    <div class="container-fluid">
-                        <div class="row mb-2">
-                            <div class="col-sm-6">
-                                <h3 class="m-0">@ViewData["Title"]</h3>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="float-sm-end" id="btnGen">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <div class="content-wrapper pt-4">
+            <div class="content rounded-2">               
                 <div class="container-fluid">
                     @RenderBody()
                 </div>
@@ -63,81 +55,25 @@
 
     </div>
 
-    <!--=============================================================-->
-    <!--==================== [Bootstrap 5.3] ========================-->
+    <!--===================================================================-->
+    <!--==================== [Bootstrap 5.3] ==============================-->
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!--==================== [Font Awesome 6.5.1] ===================-->
+    <!--==================== [Font Awesome 6.5.1] =========================-->
     <script src="~/font/fortawesome/fontawesome-free/js/all.min.js"></script>
 
-    <!--==================== [popper] ===============================-->
+    <!--==================== [popper] ======================================-->
     <script src="~/lib/popper.js/umd/popper.min.js"></script>
 
-    <!--==================== [Page script] ==========================-->
+    <!--==================== [Nest Admin Templet] =========================-->
+    <script src="~/nestadmintemplet/js/nestscript.js"></script>
+
+    <!--==================== [Page script] ================================-->
     <script>
 
-        $("#btnGen").html(`<button class="btn btn-info btn-loader"> Add New </button>`);
+        // $("#btnGen").html(`<button class="btn btn-info btn-loader"> Add New </button>`);
 
-
-        $(".btn-loader").on("click", function () {
-            var $btn = $(this);
-            var btnText = $btn.text();
-            $btn.addClass("disabled");
-            $btn.html('<i class="spinner-border mx-2" style="width: 1rem; height: 1rem;"></i>' + btnText);
-            RemoveBtnLoader($btn, btnText);
-        });
-
-        $(".btn-loader-Server").on("click", function () {
-            let $btn = $(this);
-            var btnData = addBtnLoader($btn);
-            RemoveBtnLoader(btnData.btnRef, btnData.oldbtnText);
-        });
-
-        function addBtnLoader(btnRef) {
-            let oldbtnText = btnRef.text();
-            btnRef.addClass("disabled");
-            btnRef.html('<i class="spinner-border mx-2" style="width: 1rem; height: 1rem;"></i>' + oldbtnText);
-            return { btnRef, oldbtnText }
-        }
-
-        function RemoveBtnLoader(btnRef, oldbtnText) {
-            setTimeout(function () {
-                btnRef.removeClass("disabled");
-                btnRef.html(oldbtnText);
-            }, 500);
-        }
-
-        $('#darkmood').change(function () {
-            if ($(this).is(':checked')) {
-
-                $('.sidebar').removeClass('os-theme-dark');
-                $('.main-sidebar').removeClass('sidebar-light-success');
-                $('nav.main-header').removeClass('navbar-white');
-                $('nav.main-header').removeClass('navbar-light');
-
-                $('body').addClass('dark-mode');
-                $('.main-sidebar').addClass('sidebar-dark-success');
-                $('.sidebar').addClass('os-theme-light');
-                $('nav.main-header').addClass('os-theme-light');
-
-                $('nav.main-header').addClass('navbar-black');
-                $('nav.main-header').addClass('navbar-dark');
-
-
-            } else {
-
-                $('body').removeClass('dark-mode');
-                $('.main-sidebar').removeClass('sidebar-dark-success');
-                $('.sidebar').removeClass('os-theme-light');
-                $('nav.main-header').removeClass('navbar-black');
-                $('nav.main-header').removeClass('navbar-dark');
-
-                $('nav.main-header').addClass('navbar-white');
-                $('nav.main-header').addClass('navbar-light');
-                $('.main-sidebar').addClass('sidebar-light-success');
-                $('.sidebar').addClass('os-theme-dark');
-            }
-        });
+    
 
     </script>
 </body>

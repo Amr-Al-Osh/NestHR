@@ -116,7 +116,8 @@ namespace NestHR
 
             app.MapControllerRoute(
                 name: "Login",
-                pattern: "{controller=Login}/{action=LoginPage}");
+                       pattern: "{controller=Home}/{action=index}");
+        //pattern: "{controller=Login}/{action=LoginPage}");
 
             await app.RunAsync();
         }

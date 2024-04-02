@@ -1,13 +1,4 @@
 /**
- * --------------------------------------------
- * AdminLTE Treeview.js
- * License MIT
- * --------------------------------------------
- */
-
-import $ from 'jquery'
-
-/**
  * Constants
  * ====================================================
  */
@@ -171,5 +162,3 @@ $.fn[NAME].noConflict = function () {
   $.fn[NAME] = JQUERY_NO_CONFLICT
   return Treeview._jQueryInterface
 }
-
-export default Treeview
