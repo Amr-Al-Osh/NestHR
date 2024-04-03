@@ -3,6 +3,10 @@
     transition: all 0.5s;
 }
 
+.moboleSaid{
+    display:none;
+}
+
 .NestSaidBar {
     width: 250px;
     left: 0;
@@ -10,27 +14,25 @@
     height: 100%;
     position: fixed;
     transition: width 0.5s;
-    overflow: hidden;
+    overflow-x: hidden;
+    z-index: 2000;
 }
 
 
-#sidebar.active {
+.nav-link {
     width: 100%;
-    transition: all 1s;
+    transition: width 0.5s ease-out 0.2s !important;
 }
 
-[dir="ltr"] .NestSaidBar {
-    left: 0;
-}
 
 [dir="rtl"] .NestSaidBar {
     right: 0;
 }
 
+
 .hideSidebar {
     width: 73px;
-
-    transition: width 0.5s;
+    transition: width 0.5s ease-out 0.2s !important;
 }
 
     .hideSidebar .active {
@@ -42,33 +44,20 @@
         white-space: nowrap;
     }
 
-        .hideSidebar .nav-link span.text {
-            display: none;
-            transition: display 0.5s;
-        }
-
-    .hideSidebar:hover {
-        width: 250px;
-    }
-
-
-
-
-.dropdown-toggle::after {
-    display: inline-block;
-    width: 0;
-    height: 0;
-    vertical-align: 0.255em;
-    content: "";
-    border-top: 0.3em solid;
-    border-right: 0.3em solid transparent;
-    border-bottom: 0;
-    border-left: 0.3em solid transparent;
+.nav-link span.text {
+    opacity: 1;
+    transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+    visibility: visible; 
 }
 
-.show.dropdown-toggle::after {
-    transform: rotate(180deg);
+.hideSidebar .nav-link span.text {
+    opacity: 0;
+    visibility: hidden; 
 }
+
+
+
+
 
 .Nest-Logo {
     height: 2.2rem;
@@ -84,3 +73,34 @@
         height: 59px !important;
         margin-left: -10px !important;
     }
+
+@media only screen and (max-width: 768px) {
+    .NestSaidBar {
+        left: -250px;
+    }
+
+    [dir="rtl"] .NestSaidBar {
+        right: -250px;
+    }
+
+    .hideSidebar {
+        left: 0;
+        transition: left 0.5s ease-out 0.2s !important;
+        width: 250px;
+    }
+
+        .hideSidebar .active {
+            width: 100%;
+            transition: all 1s;
+        }
+
+        .hideSidebar .nav-link span.text {
+            opacity: 1;
+            transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+            visibility: visible;
+        }
+
+    .moboleSaid {
+        display: block;
+    }
+}

@@ -1,108 +1,217 @@
-﻿<aside class="main-sidebar sidebar-light-success elevation-1">
-    <!-- Brand Logo -->
+﻿
+<link href="~/nestadmintemplet/css/_sidebars.css" rel="stylesheet" />
+<style>
 
-    <a href="index3.html" class="brand-link" style="height: 4.55rem;">
+
+
+</style>
+
+<aside class="d-flex flex-column flex-shrink-0 p-3 text-bg-light bg-light NestSaidBar" id="sidebar">
+    <div class="row flex-row-reverse" >
+        <button class="mx-2 btn btn-outline-primary sidebarToggle" style="width: 3rem; text-align: center;">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+
+    <a href="/home/index" class="col-10 Nest-Logo nowrap">
         <img src="/assetsnest/logo/HRLogo2.png"
              alt="NEST HR Logo"
-             class="brand-image img-circle"
-             style="max-width: 4rem; width: 4rem;max-height:4rem;height:59px !important;margin-left:0!important" />
+             class="brand-image img-circle" />
         <span class="brand-text font-weight-light" style="font-family:Perpetua Titling MT;font-size:2rem">NEST</span>
     </a>
-   
-    <!-- Sidebar -->
-    <div class="sidebar os-theme-dark pt-4">
-   
-        <!-- SidebarSearch Form -->
-        <div class="form-inline mt-2">
-            <div class="input-group" data-widget="sidebar-search">
-                <input class="form-control form-control-sidebar"
-                       type="search"
-                       placeholder="Search"
-                       aria-label="Search" />
-                <div class="input-group-append">
-                    <button class="btn btn-sidebar">
-                        <i class="fas fa-search fa-fw"></i>
-                    </button>
-                </div>
+    <hr />
+    <ul class="nav nav-pills flex-column mb-auto">
+        <li class="nav-item">
+            <a href="#" class="nav-link  nowrap"
+               aria-current="page"
+               data-bs-toggle="collapse"
+               data-bs-target=".home-collapse"
+               aria-expanded="false">
+                <span class="fa fa-home"></span>
+                <span class="text"> aaaaaaaaaaaaaaa</span>
+                <span class="arrow float-end text">
+                    <i class="fa fa-chevron-left" style="transition:transform 0.5s cubic-bezier(0.4, 0, 1, 1) 0s"></i>
+                </span>
+            </a>
+            <div class="collapse home-collapse" style=" transition: all 0.5s cubic-bezier(0.4, 0, 1, 1) 0s;">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li>
+                        <a href="/home/index" class="nav-link ">
+                            <span class="fa fa-home"></span>
+                            <span class="text"> Overview</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link ">
+                            <span class="fa fa-home "></span>
+                            <span class="text"> Updates</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link ">
+                            <span class="fa fa-home "></span>
+                            <span class="text"> Reports</span>
+                        </a>
+                    </li>
+                </ul>
             </div>
-        </div>
+        </li>
+        <!-- Add more menu items here -->
+    </ul>
 
-        <!-- Sidebar Menu -->
-        <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar"
-                data-widget="treeview"
-                role="menu"
-                data-accordion="false">
-                <li class="nav-header">MULTI LEVEL EXAMPLE</li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-circle nav-icon"></i>
-                        <p>Level 1</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-circle"></i>
-                        <p>
-                            Level 1
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Level 2</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>
-                                    Level 2
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="far fa-dot-circle nav-icon"></i>
-                                        <p>Level 3</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="far fa-dot-circle nav-icon"></i>
-                                        <p>Level 3</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="far fa-dot-circle nav-icon"></i>
-                                        <p>Level 3</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Level 2</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-circle nav-icon"></i>
-                        <p>Level 1</p>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-        <!-- /.sidebar-menu -->
-    </div>
-    <!-- /.sidebar -->
+
 </aside>
 
-<script src="~/nestadmintemplet/js/sidebar.js"></script>
+
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+        /*=========================================================================
+        [Active Element in sidebar when clicked or when URL matches]
+        =========================================================================*/
+        let navLinks = document.querySelectorAll('.nav-link');
+        console.log(navLinks);
+        navLinks.forEach(function (navLink) {
+            navLink.addEventListener('click', function () {
+                navLinks.forEach(function (link) {
+                    link.classList.remove('active');
+                    // Reset arrow rotation
+                    let arrow = link.parentElement.querySelector('.arrow svg');
+                    if (arrow) {
+                        arrow.style.transform = 'rotate(0deg)';
+                    }
+                });
+                this.classList.add('active');
+                     
+                let arrow = this.parentElement.querySelector('.arrow svg');
+                if (arrow) {
+                    arrow.style.transform = 'rotate(270deg)';
+                }
+            });
+        });
+
+        // Extract path from current URL
+        let currentUrl = window.location.href;
+        let currentPath = new URL(currentUrl).pathname;
+
+        // Remove all active classes initially
+        navLinks.forEach(function (navLink) {
+            navLink.classList.remove('active');
+        });
+
+        // Add 'active' class to nav item based on current URL
+        navLinks.forEach(function (navLink) {
+            let navLinkHref = navLink.getAttribute('href');
+            if (navLinkHref === currentPath || currentUrl.endsWith(navLinkHref)) {
+                // Find arrow and rotate it
+                let arrow = navLink.querySelector('.arrow svg');
+                if (arrow) {
+                    arrow.style.transform = 'rotate(270deg)';
+                }
+
+                // Add 'active' class to nav item
+                navLink.classList.add('active');
+
+                // Find collapsible element
+                let collapsible = findCollapsible(navLink);
+                if (collapsible) {
+                    collapsible.classList.add('show');
+                }
+            }
+        });
+
+
+        // Function to find collapsible element
+        function findCollapsible(navLink) {
+            let parent = navLink.parentElement;
+            while (parent) {
+                let collapsible = parent.querySelector('.collapse');
+                if (collapsible) {
+                    return collapsible;
+                }
+                parent = parent.parentElement;
+            }
+            return null;
+        }
+    });
+
+
+
+    $(document).ready(function () {
+
+        let hoveSaidBar = false;
+
+        /*=========================================================================
+        [Open sidebar in click and hove]
+        =========================================================================*/
+
+        $(".sidebarToggle").on("click", function () {
+            $("#sidebar").toggleClass("hideSidebar");
+            hoveSaidBar = $("#sidebar").hasClass("hideSidebar");
+            if (isPhoneScreen()) {
+                $("#sidebar").css('left', "");
+            }else{
+                ChangeSaidBarinBigScreen();
+            }
+           
+        });
+
+        function ChangeSaidBarinBigScreen() {        
+
+            if ($("html").prop("dir") != "rtl") {
+                if (hoveSaidBar) {
+                    $(".navbar").css("padding-left", "75px");
+                    $(".content").css("padding-left", "75px");
+                } else {
+                    $(".navbar").css("padding-left", "");
+                    $(".content").css("padding-left", "");
+                }
+            } else {
+                if (hoveSaidBar) {
+                    $(".navbar").css("padding-right", "75px");
+                    $(".content").css("padding-right", "75px");
+                } else {
+                    $(".navbar").css("padding-right", "");
+                    $(".content").css("padding-right", "");
+                }
+            }
+        }
+
+        // sidebar.addEventListener('mouseover', function () {
+        //     if (hoveSaidBar && !isPhoneScreen())
+        //         this.classList.remove('hideSidebar');
+        // });
+
+        // sidebar.addEventListener('mouseout', function () {
+        //     if (hoveSaidBar && !isPhoneScreen())
+        //         this.classList.add('hideSidebar');
+        // });
+
+        // $("body").on("mouseout", function () {
+        //     if (isPhoneScreen()) {
+        //         $("#sidebar").css('left', "-250px");
+        //     }
+        // });
+
+
+        function isPhoneScreen() {
+            return window.matchMedia("(max-width: 768px)").matches;
+        }
+
+        /*=========================================================================
+        [Rotate Arrow in SaidBar]
+        =========================================================================*/
+        $('.collapse').on('shown.bs.collapse', function () {
+            $(this).parent().find('.arrow svg').css('transform', 'rotate(270deg)');
+        }).on('hidden.bs.collapse', function () {
+            $(this).parent().find('.arrow svg').css('transform', 'rotate(0deg)');
+        });
+
+    });
+
+
+
+
+
+</script>

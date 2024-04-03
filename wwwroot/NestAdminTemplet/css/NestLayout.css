@@ -1,0 +1,25 @@
+﻿:root {
+    --padding-phone: 250px; /* Define padding value for phone */
+}
+
+.navbar {
+    padding-left: var(--padding-phone);
+}
+
+[dir="rtl"] .navbar {
+    padding-right: var(--padding-phone);
+}
+
+.content {
+    padding-left: var(--padding-phone);
+}
+
+[dir="rtl"] .content {
+    padding-right: var(--padding-phone);
+}
+
+@media only screen and (max-width: 768px) {
+    :root {
+        --padding-phone: 10px;
+    }
+}

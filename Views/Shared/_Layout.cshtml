@@ -14,13 +14,14 @@
     <!--==================== [Bootstrap 5.3] ===============================-->
     <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/dist/css/bootstrap-utilities.min.css" rel="stylesheet" />
-
    @*  <link href="~/lib/bootstrap/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/dist/css/bootstrap-utilities.rtl.min.css" rel="stylesheet" /> *@
 
     <!--==================== [Nest Admin Templet] =========================-->
     <link href="~/nestadmintemplet/css/nesttemplet.css" rel="stylesheet" />
-@*     <link rel="stylesheet" href="~/nestadmintemplet/css/neststyle.css" /> *@
+    <link href="~/nestadmintemplet/css/nestlayout.css" rel="stylesheet" />
+    <link href="~/nestadmintemplet/css/nesttheme.css" rel="stylesheet" />
+
 
 </head>
 
@@ -35,8 +36,7 @@
         <!--==============================================================-->
         <!--==================== [Sidebar] ===============================-->
         <!--==============================================================-->
-        @*@await Html.PartialAsync("Components/_Sidebar") *@
-        @await Html.PartialAsync("Components/_Sidebar2")
+        @await Html.PartialAsync("Components/_Sidebar")
 
         <!--==============================================================-->
         <!--==================== [Content] ===============================-->
