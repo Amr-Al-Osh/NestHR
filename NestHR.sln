@@ -10,7 +10,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NestHR", "NestHR.csproj", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domin", "..\Domin\Domin.csproj", "{BED20477-DCAC-4D68-9789-4092ABB6F009}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRService", "..\HRService\HRService.csproj", "{4A4B9CE5-D7A6-4126-9E13-B60C038ACE9D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HRService", "..\HRService\HRService.csproj", "{4A4B9CE5-D7A6-4126-9E13-B60C038ACE9D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -18,17 +18,17 @@ namespace NestHR.Controllers.GeneralDefinition
         public AreaController(IHRDefinitionWrapper db, LanguageService localization, IConfiguration config, IHttpContextAccessor httpContextAccessor)
             : base(localization, config, httpContextAccessor) => _db = db;
 
-        [Route("AreaPage")]
+  
         public IActionResult AreaPage()
         {
-            var token = CheckIfHaveToken();
+            //var token = CheckIfHaveToken();
 
-            if (token is null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
+            //if (token is null)
+            //{
+            //    return RedirectToAction("Index", "Home");
+            //}
 
-            ViewBag.Token = token;
+            //ViewBag.Token = token;
 
             return View();
         }

@@ -3,6 +3,8 @@ using HRService.GeneralDefinitionService;
 using HRService.GeneralDefinitionService.Interfaces;
 using HRService.LogHR;
 using HRService.LogHR.Interfaces;
+using HRService.Pages;
+using HRService.Pages.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
@@ -65,7 +67,7 @@ namespace NestHR
 
             builder.Services.AddScoped<IHRDefinitionWrapper, HRDefinitionWrapper>();
             builder.Services.AddScoped<IHrLogWarpper, HrLogWarpper>();
-
+            builder.Services.AddScoped<IGetPagesWarpper, GetPagesWarpper>();
             #endregion [Scoped General]
 
             #region =====================> [Jwt Authorization && Authentication]
@@ -116,7 +118,7 @@ namespace NestHR
 
             app.MapControllerRoute(
                 name: "Login",
-                       pattern: "{controller=Home}/{action=index}");
+                       pattern: "{controller=Home}/{action=MainPage}");
         //pattern: "{controller=Login}/{action=LoginPage}");
 
             await app.RunAsync();

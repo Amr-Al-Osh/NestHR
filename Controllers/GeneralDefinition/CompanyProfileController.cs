@@ -28,16 +28,16 @@ namespace NestHR.Controllers.GeneralDefinition
         [Route("CompanyProfile")]
         public IActionResult CompanyProfilePage()
         {
-            var token = CheckIfHaveToken();
+            //var token = CheckIfHaveToken();
 
-            if (token is null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
+            //if (token is null)
+            //{
+            //    return RedirectToAction("Index", "Home");
+            //}
 
-            userData = GetDataFromCookies();
+            //userData = GetDataFromCookies();
 
-            ViewBag.Token = token;
+            //ViewBag.Token = token;
 
             return View();
         }

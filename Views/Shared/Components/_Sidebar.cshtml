@@ -7,7 +7,8 @@
 </style>
 
 <aside class="d-flex flex-column flex-shrink-0 p-3 text-bg-light bg-light NestSaidBar" id="sidebar">
-    <div class="row flex-row-reverse" >
+
+    <div class="row flex-row-reverse">
         <button class="mx-2 btn btn-outline-primary sidebarToggle" style="width: 3rem; text-align: center;">
             <i class="fas fa-bars"></i>
         </button>
@@ -20,7 +21,8 @@
         <span class="brand-text font-weight-light" style="font-family:Perpetua Titling MT;font-size:2rem">NEST</span>
     </a>
     <hr />
-    <ul class="nav nav-pills flex-column mb-auto">
+
+    <ul class="nav nav-pills flex-column mb-auto" id="FillSidebar">
         <li class="nav-item">
             <a href="#" class="nav-link  nowrap"
                aria-current="page"
@@ -56,8 +58,10 @@
                 </ul>
             </div>
         </li>
-        <!-- Add more menu items here -->
+
+
     </ul>
+
 
 
 </aside>
@@ -83,7 +87,7 @@
                     }
                 });
                 this.classList.add('active');
-                     
+
                 let arrow = this.parentElement.querySelector('.arrow svg');
                 if (arrow) {
                     arrow.style.transform = 'rotate(270deg)';
@@ -136,8 +140,6 @@
         }
     });
 
-
-
     $(document).ready(function () {
 
         let hoveSaidBar = false;
@@ -151,13 +153,13 @@
             hoveSaidBar = $("#sidebar").hasClass("hideSidebar");
             if (isPhoneScreen()) {
                 $("#sidebar").css('left', "");
-            }else{
+            } else {
                 ChangeSaidBarinBigScreen();
             }
-           
+
         });
 
-        function ChangeSaidBarinBigScreen() {        
+        function ChangeSaidBarinBigScreen() {
 
             if ($("html").prop("dir") != "rtl") {
                 if (hoveSaidBar) {
@@ -210,8 +212,64 @@
 
     });
 
+</script>
 
+<script>
+    GetGroupPages();
+    function GetGroupPages() {
+        $.ajax({
+            type: "GET",
+            url: "/Home/GetGroupPages",
+            success: function (data) {
+                console.log(data);
 
+                let main = '<ul class="nav flex-column">';
+                let Endmain = '</ul>';
 
+                for (let i = 0; i < data.length; i++) {
+                    let collId = "Test" + i;
+                    let Pages = '';
 
+                    let header = FillGroup(data[i].groupNameEng, collId);
+
+                    Pages += '<div class="collapse ' + collId + '">';
+                    Pages += '<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">';
+
+                    for (let j = 0; j < data[i].pagesList.length; j++) {
+                        if (data[i].groupNum == data[i].pagesList[j].pageGroup) {
+                            Pages += FillPages(data[i].pagesList[j].pageNameAr, data[i].pagesList[j].url, data[i].pagesList[j].icon);
+                        }
+                    }
+
+                    Pages += '</ul></div>';
+                    main += '<li class="nav-item">' + header + Pages + '</li>';
+                }
+
+                $("#FillSidebar").html(main);
+            },
+            error: function (xhr, status, error) {
+                console.error("Error occurred while fetching data:", error);
+                alert("Error occurred while fetching data. Please try again later.");
+            }
+        });
+    }
+
+    function FillGroup(GroupName, collId) {
+        return `<a href="#" class="nav-link nowrap" aria-current="page" data-bs-toggle="collapse" data-bs-target=".${collId}" aria-expanded="false">
+                        <span class="fa fa-home"></span>
+                        <span class="text">${GroupName}</span>
+                        <span class="arrow float-end text">
+                            <i class="fa fa-chevron-left" style="transition:transform 0.5s cubic-bezier(0.4, 0, 1, 1) 0s"></i>
+                        </span>
+                    </a>`;
+    }
+
+    function FillPages(PagesName, url, icon) {
+        return `<li>
+                        <a href="${url}" class="nav-link ">
+                            <span class="fa ${icon}"></span>
+                            <span class="text">${PagesName}</span>
+                        </a>
+                    </li>`;
+    }
 </script>

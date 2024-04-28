@@ -1,3 +1,4 @@
+using HRService.Pages.Interfaces;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using NestHR.LanguageSupport;
@@ -6,22 +7,64 @@ using System.Diagnostics;
 
 namespace NestHR.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : HRBaseController
     {
-        private LanguageService _localization;
-        public HomeController(LanguageService localization)
+        private readonly IGetPagesWarpper _db;
+        public HomeController(
+            IGetPagesWarpper db,
+            LanguageService localization,
+            IConfiguration config,
+            IHttpContextAccessor httpContextAccessor) : base(localization, config, httpContextAccessor)
         {
-            _localization = localization;
+            _db = db;
         }
 
-        public IActionResult Index()
+        public IActionResult MainPage()
         {
-           // var currentCulture = Thread.CurrentThread.CurrentUICulture.Name;
-            ViewData["Greeting"] = _localization.Getkey("lbl_Home").Value;
             return View();
         }
 
+        public async Task<IActionResult> GetGroupPages()
+        {
+            try
+            {
+                IQueryable<Domin.Models.GroupPage> groupPages = await _db.GroupPages.ReadAsync();
+                IQueryable<Domin.Models.Page> pages = await _db.Pages.ReadAsync();
 
+                IQueryable<PageModel> pagesData = pages
+                    .Where(page => page.IsShow ?? false)
+                    .OrderBy(page => page.OrderPage)
+                    .Select(page => new PageModel
+                    {
+                        PageNameAr = page.PageNameAr,
+                        Icon = page.Icon,
+                        Url = page.Url,
+                        PageGroup = page.PageGroup
+                    }).AsQueryable();
+
+                List<GroupPagesModel> sidebarData = (
+                    from _group in groupPages
+                    where _group.IsShow ?? false
+                    orderby _group.OrderGroup
+                    let _pages = pagesData.Where(page => _group.GroupNum == page.PageGroup).ToList()
+                    select new GroupPagesModel
+                    {
+                        GroupNum = _group.GroupNum,
+                        GroupNameAr = _group.GroupNameAr,
+                        GroupNameEng = _group.GroupNameEng,
+                        MasterGroup = _group.MasterGroup,
+                        OrderGroup = _group.OrderGroup,
+                        PagesList = _pages
+                    }).AsEnumerable().ToList();
+
+                return Ok(sidebarData);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
 
         #region Localization
         public IActionResult ChangeLanguage(string culture)
@@ -34,12 +77,6 @@ namespace NestHR.Controllers
         }
         #endregion
 
-
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
